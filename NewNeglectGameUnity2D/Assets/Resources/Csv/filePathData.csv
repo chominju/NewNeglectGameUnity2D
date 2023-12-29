@@ -1,0 +1,6 @@
+fileName,type,path
+playerData,Asset,Assets\\Resources\\PlayerData.asset
+playetStat,Csv,playerStatData
+loginLog,Text,Assets\\TextFile\\LoginLog.txt
+enemyData,Csv,enemyData
+fieldData,Csv,fieldData

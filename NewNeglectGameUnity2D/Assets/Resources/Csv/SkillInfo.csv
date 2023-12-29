@@ -1,0 +1,10 @@
+﻿SkillName,SkillShowName,MaxLevel,Icon_Sprite,SaveDataPath,MixCount,TranscendenceMaxLevel,SkillCoolTime,HoldingTime
+Tornado,토네이도,100,Sprite/Skill/Icon/Icon_Tornado,Assets/Resources/SaveData/Skill/TornadoData.asset,3,5,5,5
+EarthSpikes,어스 퀘이크,100,Sprite/Skill/Icon/Icon_EarthSpikes,Assets/Resources/SaveData/Skill/EarthSpikesData.asset,3,5,6,1
+FireBall,파이어 볼,100,Sprite/Skill/Icon/Icon_FireBall,Assets/Resources/SaveData/Skill/FireBallData.asset,3,5,12,1
+FireWall,파이어 월,100,Sprite/Skill/Icon/Icon_FireWall,Assets/Resources/SaveData/Skill/FireWallData.asset,3,5,10,1
+FireWhip,파이어 윕,100,Sprite/Skill/Icon/Icon_FireWhip,Assets/Resources/SaveData/Skill/FireWhipData.asset,3,5,15,1
+FlameSlash,플레임 슬래쉬,100,Sprite/Skill/Icon/Icon_FlameSlash,Assets/Resources/SaveData/Skill/FlameSlashData.asset,3,5,18,1
+Flamethrower,플레임 쓰로워,100,Sprite/Skill/Icon/Icon_Flamethrower,Assets/Resources/SaveData/Skill/FlamethrowerData.asset,3,5,7,2
+Meteor,메테오,100,Sprite/Skill/Icon/Icon_Meteor,Assets/Resources/SaveData/Skill/MeteorData.asset,3,5,25,3
+IcePillar,아이스 필러,100,Sprite/Skill/Icon/Icon_IcePillar,Assets/Resources/SaveData/Skill/IcePillarData.asset,3,5,20,2

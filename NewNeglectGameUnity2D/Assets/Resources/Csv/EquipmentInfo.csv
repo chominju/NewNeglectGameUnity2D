@@ -1,0 +1,5 @@
+﻿EquipmentName,EquipmentShowName,MaxLevel,Sprite,SaveDataPath,MixCount
+WoodenSword,우든 소드,100,Sprite/Equipment/WoodenSword,Assets/Resources/SaveData/WoodenSwordData.asset,50
+IronSword,아이언 소드,100,Sprite/Equipment/IronSword,Assets/Resources/SaveData/IronSwordData.asset,10
+SilverSword,실버 소드,100,Sprite/Equipment/SilverSword,Assets/Resources/SaveData/SilverSwordData.asset,5
+GoldenSword,골든 소드,100,Sprite/Equipment/GoldenSword,Assets/Resources/SaveData/GoldenSwordData.asset,3

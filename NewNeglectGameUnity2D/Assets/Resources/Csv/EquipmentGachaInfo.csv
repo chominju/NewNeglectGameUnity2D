@@ -1,0 +1,5 @@
+﻿EquipmentName,EquipmentShowName,Sprite
+WoodenSword,우든 소드,Assets/Resources/Sprite/WoodenSword.png
+IronSword,아이언 소드,Assets/Resources/Sprite/IronSword.png
+SilverSword,실버 소드,Assets/Resources/Sprite/SilverSword.png
+GoldenSword,골든 소드,Assets/Resources/Sprite/GoldenSword.png

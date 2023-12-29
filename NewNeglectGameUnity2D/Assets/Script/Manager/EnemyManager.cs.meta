@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 9c39be555b74f5c42b0e338ae8e6ce9b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - skullPrefab: {fileID: 7005460146046436393, guid: b3fdcf183f8f5024e8a88f0db035c7fc, type: 3}
+  - dogPrefab: {fileID: 5918519930276811200, guid: 41abbcb1ebcf2964e8be3c8adde47598, type: 3}
+  - enemyCanvas: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
