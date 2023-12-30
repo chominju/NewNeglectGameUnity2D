@@ -23,6 +23,12 @@ public class PlayerInfoUI : MonoBehaviour
     public Text playerInfoMaxHpText;
     public Text playerInfoMaxMpText;
 
+    public Button atkButton;
+    public Button defButton;
+    public Button moveSpeedButton;
+    public Button maxHpButton;
+    public Button maxMpButton;
+
     GameObject player;
     Player.PlayerInfoData playerInfoData;
     List<Dictionary<string, object>> getStatCsv;
@@ -90,15 +96,36 @@ public class PlayerInfoUI : MonoBehaviour
         playerStatPointText.text = "스킬포인트 : " + playerInfoData.statPoint;
     }
 
+    public void SetStatButton()
+    {
+       if(playerInfoData.statPoint>0)
+        {
+            atkButton.GetComponent<Image>().color = Color.yellow;
+            defButton.GetComponent<Image>().color = Color.yellow;
+            moveSpeedButton.GetComponent<Image>().color = Color.yellow;
+            maxHpButton.GetComponent<Image>().color = Color.yellow;
+            maxMpButton.GetComponent<Image>().color = Color.yellow;
+        }
+       else
+        {
+            atkButton.GetComponent<Image>().color = Color.gray;
+            defButton.GetComponent<Image>().color = Color.gray;
+            moveSpeedButton.GetComponent<Image>().color = Color.gray;
+            maxHpButton.GetComponent<Image>().color = Color.gray;
+            maxMpButton.GetComponent<Image>().color = Color.gray;
+        }
+    }
+
     public void UpdatePlayerInfoMenu()
     {
         SetStatPointUI();
+        SetStatButton();
         SetStatDetail();
-        SetStatText(playerStatAtkText, "atk");
-        SetStatText(playerStatDefText, "def");
-        SetStatText(playerStatMoveSpeedText, "moveSpeed");
-        SetStatText(playerStatMaxHpText, "maxHp");
-        SetStatText(playerStatMaxMpText, "maxMp");
+        SetStatText(playerStatAtkText, "Atk");
+        SetStatText(playerStatDefText, "Def");
+        SetStatText(playerStatMoveSpeedText, "MoveSpeed");
+        SetStatText(playerStatMaxHpText, "MaxHp");
+        SetStatText(playerStatMaxMpText, "MaxMp");
     }
 
     public void SetStatDetail()
@@ -113,33 +140,39 @@ public class PlayerInfoUI : MonoBehaviour
 
     public void SetStatText(Text textObject, string stat)
     {
+        Button curButton;
         string statName = " ";
         string level;
         var getPlayerData = DataManager.GetDataManager().GetPlayerData();
-        if (stat.Equals("atk"))
+        if (stat.Equals("Atk"))
         {
             statName = "공격력";
             level = getPlayerData.atkLevel.ToString();
+            curButton = atkButton;
         }
-        else if (stat.Equals("def"))
+        else if (stat.Equals("Def"))
         {
             statName = "방어력";
             level = getPlayerData.defLevel.ToString();
+            curButton = defButton;
         }
-        else if (stat.Equals("moveSpeed"))
+        else if (stat.Equals("MoveSpeed"))
         {
             statName = "이동속도";
             level = getPlayerData.moveSpeedLevel.ToString();
+            curButton = moveSpeedButton;
         }
-        else if (stat.Equals("maxHp"))
+        else if (stat.Equals("MaxHp"))
         {
             statName = "최대체력";
             level = getPlayerData.maxHpLevel.ToString();
+            curButton = maxHpButton;
         }
-        else if (stat.Equals("maxMp"))
+        else if (stat.Equals("MaxMp"))
         {
             statName = "최대마나";
             level = getPlayerData.maxMpLevel.ToString();
+            curButton = maxMpButton;
         }
         else
         {
@@ -154,6 +187,7 @@ public class PlayerInfoUI : MonoBehaviour
             if (getStatCsv[int.Parse(level) + 1][stat].ToString() == "")
             {
                 level = "MAX";
+                curButton.GetComponent<Image>().color = Color.gray;
             }
             else
                 statCsvNext = getStatCsv[int.Parse(level) + 1][stat].ToString();
@@ -176,7 +210,7 @@ public class PlayerInfoUI : MonoBehaviour
         if (playerInfoData.statPoint > 0)
         {
             int level = DataManager.GetDataManager().GetPlayerData().atkLevel;
-            if ((DataManager.GetDataManager().GetStatCSV()[level + 1]["atk"].ToString()).Equals(""))
+            if ((DataManager.GetDataManager().GetStatCSV()[level + 1]["Atk"].ToString()).Equals(""))
             {
                 SoundManager.GetInstance().PlayFailSound();
                 return;
@@ -193,7 +227,7 @@ public class PlayerInfoUI : MonoBehaviour
         if (playerInfoData.statPoint > 0)
         {
             int level = DataManager.GetDataManager().GetPlayerData().defLevel;
-            if ((getStatCsv[level + 1]["def"].ToString()).Equals(""))
+            if ((getStatCsv[level + 1]["Def"].ToString()).Equals(""))
             {
                 SoundManager.GetInstance().PlayFailSound();
                 return;
@@ -209,7 +243,7 @@ public class PlayerInfoUI : MonoBehaviour
         if (playerInfoData.statPoint > 0)
         {
             int level = DataManager.GetDataManager().GetPlayerData().moveSpeedLevel;
-            if ((getStatCsv[level + 1]["moveSpeed"].ToString()).Equals(""))
+            if ((getStatCsv[level + 1]["MoveSpeed"].ToString()).Equals(""))
             {
                 SoundManager.GetInstance().PlayFailSound();
                 return;
@@ -225,7 +259,7 @@ public class PlayerInfoUI : MonoBehaviour
         if (playerInfoData.statPoint > 0)
         {
             int level = DataManager.GetDataManager().GetPlayerData().maxHpLevel;
-            if ((getStatCsv[level + 1]["maxHp"].ToString()).Equals(""))
+            if ((getStatCsv[level + 1]["MaxHp"].ToString()).Equals(""))
             {
                 SoundManager.GetInstance().PlayFailSound();
                 return; 
@@ -243,7 +277,7 @@ public class PlayerInfoUI : MonoBehaviour
         if (playerInfoData.statPoint > 0)
         {
             int level = DataManager.GetDataManager().GetPlayerData().maxMpLevel;
-            if ((getStatCsv[level + 1]["maxMp"].ToString()).Equals(""))
+            if ((getStatCsv[level + 1]["MaxMp"].ToString()).Equals(""))
             {
                 SoundManager.GetInstance().PlayFailSound();
                 return;

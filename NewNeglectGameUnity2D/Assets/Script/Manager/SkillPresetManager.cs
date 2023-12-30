@@ -132,8 +132,8 @@ public class SkillPresetManager : MonoBehaviour
                 Debug.Log("Preset Load Error");
             skillPresetButtonImage[num] = presetButton.transform.Find("SkillImage" + buttonNum).gameObject;
             skillPresetButtonCoolTimeText[num] = presetButton.transform.Find("SkillCoolTime" + buttonNum).gameObject;
-            presetButton.transform.Find("SkillImage" + buttonNum).GetComponent<Image>().sprite = Resources.Load<Sprite>("Skill/Icon/" + "Icon_" + skillName);
-            skillPresetButtonImageBackGround[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Skill/Icon/" + "Icon_" + skillName);
+            presetButton.transform.Find("SkillImage" + buttonNum).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/Skill/Icon/" + "Icon_" + skillName);
+            skillPresetButtonImageBackGround[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/Skill/Icon/" + "Icon_" + skillName);
             skillPresetButtonImageBackGround[num].GetComponent<Image>().color = Color.gray; //new Color(0.2f, 0.2f, 0.2f);
     }
 

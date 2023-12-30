@@ -22,7 +22,8 @@ public class FileReader : MonoBehaviour
 
         var lines = Regex.Split(data.text, LINE_SPLIT_RE);
 
-        if (lines.Length <= 1) return list;
+        if (lines.Length <= 1)
+            return list;
 
         var header = Regex.Split(lines[0], SPLIT_RE);
         for (var i = 1; i < lines.Length; i++)
@@ -48,6 +49,7 @@ public class FileReader : MonoBehaviour
                     finalvalue = f;
                 }
                 entry[header[j]] = finalvalue;
+            Debug.Log("FileReader reading : " + newPath + "  Value : "+value +"   finalValue : "+ finalvalue.ToString());
             }
             list.Add(entry);
         }

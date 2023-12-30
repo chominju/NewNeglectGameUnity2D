@@ -36,14 +36,12 @@ public class EquipmentUI : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-
         currentEquipmentButton = null;
         eqInfoUi.SetActive(false);
         backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
         SetEquipmentUI();
         isMixAble = false;
     }
-
     void DataUpdateAndTextUpdate()
     {
         SetEquipmentUI();

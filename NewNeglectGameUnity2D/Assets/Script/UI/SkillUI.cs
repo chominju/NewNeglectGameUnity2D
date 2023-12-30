@@ -382,7 +382,7 @@ public class SkillUI : MonoBehaviour
             {
                 if (presetButton == null)
                     Debug.Log("skillpreset Image Error");
-                presetButton.transform.Find("SkillImage"+ buttonNum).GetComponent<Image>().sprite = Resources.Load<Sprite>("Skill/Icon/" + "Icon_"+getSkillPreset[i]);
+                presetButton.transform.Find("SkillImage"+ buttonNum).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/Skill/Icon/" + "Icon_"+getSkillPreset[i]);
             }
         }
         //DataManager.EquipmentLevelUp(CurrentSkillButton.name);

@@ -48,14 +48,14 @@ public class DataManager : MonoBehaviour
     private const string equipmentDataFileName = "EquipmenData";
     private const string enemyDataFileName = "enemyData";
     private const string fieldDataFileName = "fieldData";
-    private const string saveAchievementDataPath = @"Assets\Resources\SaveData\Achievement.json";
 
 
     private string playerDataSavePath;
     private string equipmentDataSavePath;
+    private string achievementDataSavePath;// = @"Assets\Resources\SaveData\Achievement.json";
     private string skillDataSavePath;
-    private string loginLogPath = Application.streamingAssetsPath + "\\TextFile\\LoginLog.txt";
-    private string lastLogoutLogPath = Application.streamingAssetsPath + "\\TextFile\\LastLoginLog.txt";
+    private string loginLogPath; 
+    private string lastLogoutLogPath;
 
 
     private event UpdateData PlayerUpdateEvnet;
@@ -70,10 +70,12 @@ public class DataManager : MonoBehaviour
         if (instance == null)
             instance = this;
 
-        
-        playerDataSavePath = Application.streamingAssetsPath + "\\SaveData\\"+"PlayerData.json";
-        equipmentDataSavePath = Application.streamingAssetsPath + "\\SaveData\\";// + "PlayerData.json";// + "/EquipmentData.dat";
-        skillDataSavePath = Application.streamingAssetsPath +"\\SaveData\\";// + "PlayerData.json";// + "/SkillData.dat";
+        playerDataSavePath = Application.persistentDataPath + "PlayerData.json"; //Application.streamingAssetsPath /*+ "\\SaveData\\"*/+"PlayerData.json";
+        equipmentDataSavePath = Application.persistentDataPath;//Application.streamingAssetsPath;/* + "\\SaveData\\";*/// + "PlayerData.json";// + "/EquipmentData.dat";
+        skillDataSavePath = Application.persistentDataPath;//Application.streamingAssetsPath; /*+"\\SaveData\\";*/// + "PlayerData.json";// + "/SkillData.dat";
+        achievementDataSavePath = Application.persistentDataPath + "Achievementdata.json";
+        loginLogPath =  Application.persistentDataPath + "LoginLog.txt";
+        lastLogoutLogPath = Application.persistentDataPath + "LastLoginLog.txt";
         //playerData = new PlayerData();
 
         if (instance !=null)
@@ -111,7 +113,7 @@ public class DataManager : MonoBehaviour
 
 
         loginLogText = FileReader.ReadTXTFile(loginLogPath);
-        achievementDataText = FileReader.ReadTXTFile(saveAchievementDataPath);
+        achievementDataText = FileReader.ReadTXTFile(achievementDataSavePath);
         lastLoginLogText = FileReader.ReadTXTFile(lastLogoutLogPath);
 
         CreateEquipmentDetailData();
@@ -134,8 +136,11 @@ public class DataManager : MonoBehaviour
 
     public void InitAllData()
     {
+        Debug.Log("CreateEquipmentData");
         CreateEquipmentData();
+        Debug.Log("CreateSkillData");
         CreateSkillData();
+        Debug.Log("CreateAchievementData");
         CreateAchievementData();
     }
 
@@ -458,6 +463,16 @@ public class DataManager : MonoBehaviour
     #region 데이터 생성하기(플레이어,장비,스킬)
     public void CreatePlayerData(string playerName)
     {
+        int size = 0;
+        foreach (var temp in playerStatCsv)
+        {
+            Debug.Log(temp["MaxHp"].ToString());
+            Debug.Log(temp["MaxMp"].ToString());
+            Debug.Log(temp["MaxExp"].ToString());
+        }
+
+
+
         Debug.Log("CreatePlayerData Datamaneger");
         playerData = new PlayerData();
         //playerData = ScriptableObject.CreateInstance<PlayerData>();
@@ -468,7 +483,10 @@ public class DataManager : MonoBehaviour
         playerData.moveSpeedLevel = 1;     
         playerData.maxHpLevel = 1;         
         playerData.maxMpLevel = 1;
-        playerData.currentHp = int.Parse(playerStatCsv[playerData.playerLevel]["maxHp"].ToString());
+
+        Debug.Log("playerStatCsv[playerData.playerLevel][MaxHp].ToString() : " + playerStatCsv[playerData.playerLevel]["MaxHp"].ToString());
+        playerData.currentHp = int.Parse(playerStatCsv[playerData.playerLevel]["MaxHp"].ToString());
+        Debug.Log("CreatePlayerData Datamaneger MaxHp after");
         playerData.currentExp = 0;
         playerData.statPoint = 0;
         playerData.animationSpeed = 2;   
@@ -482,26 +500,42 @@ public class DataManager : MonoBehaviour
     public void CreateEquipmentData()
     {
         int size = equipmentCsv.Count;
+        Debug.Log("CreateEquipmentData size :"+size);
+        Debug.Log("CreateEquipmentData Conut before");
         if (equipmentData == null)
             equipmentData = new ItemData[size];
+        Debug.Log("CreateEquipmentData Conut after");
         for (int i = 0; i < size; i++)
         {
+        Debug.Log("CreateEquipmentData new B");
             equipmentData[i] = new ItemData();
+        Debug.Log("CreateEquipmentData new A");
             //string temp = equipmentCsv[i]["SaveDataPath"].ToString();
             //equipmentData[i] = ScriptableObject.CreateInstance<ItemData>();
             //equipmentData[i].name = equipmentCsv[i]["EquipmentName"].ToString() + "Data";
+        Debug.Log("CreateEquipmentData Name A");
             equipmentData[i].itemName = equipmentCsv[i]["EquipmentName"].ToString();
+        Debug.Log("CreateEquipmentData Show A");
             equipmentData[i].itemShowName = equipmentCsv[i]["EquipmentShowName"].ToString();
+        Debug.Log("CreateEquipmentData level A");
             equipmentData[i].itemLevel = 1;
+        Debug.Log("CreateEquipmentData maxL A");
             equipmentData[i].itemMaxLevel = int.Parse(equipmentCsv[i]["MaxLevel"].ToString());
+        Debug.Log("CreateEquipmentData qun A");
             equipmentData[i].quantity = 0;
             equipmentData[i].isGainItem = false;
+        Debug.Log("CreateEquipmentData mix A");
             equipmentData[i].mixCount = int.Parse(equipmentCsv[i]["MixCount"].ToString());
+        Debug.Log("CreateEquipmentData spr A");
             equipmentData[i].sprite = Resources.Load<Sprite>(equipmentCsv[i]["Sprite"].ToString());
+        Debug.Log("CreateEquipmentData spr2 A");
 
-            string newPath = equipmentDataSavePath + ("/" + equipmentCsv[i]["EquipmentName"].ToString() + ".json");
+            string newPath = equipmentDataSavePath + ("\\" + equipmentCsv[i]["EquipmentName"].ToString() + ".json");
+        Debug.Log("CreateEquipmentData json A");
             string json = JsonUtility.ToJson(equipmentData[i]);
+        Debug.Log("CreateEquipmentData newPath:"+newPath);
             File.WriteAllText(newPath, json);
+        Debug.Log("CreateEquipmentData json3 A");
 
 
 
@@ -1007,17 +1041,17 @@ public class DataManager : MonoBehaviour
 
     public void GainExp(int exp)
     {
-        int maxExp =  int.Parse(playerStatCsv[playerData.playerLevel]["maxExp"].ToString());
+        int maxExp =  int.Parse(playerStatCsv[playerData.playerLevel]["MaxExp"].ToString());
         playerData.currentExp += exp;
         while (true)
         {
             if (playerData.currentExp >= maxExp)
             {
-                maxExp = int.Parse(playerStatCsv[playerData.playerLevel]["maxExp"].ToString());
+                maxExp = int.Parse(playerStatCsv[playerData.playerLevel]["MaxExp"].ToString());
                 playerData.currentExp -= maxExp;
                 playerData.playerLevel++;
                 playerData.statPoint++;
-                playerData.currentHp = int.Parse(playerStatCsv[playerData.maxHpLevel]["maxHp"].ToString());
+                playerData.currentHp = int.Parse(playerStatCsv[playerData.maxHpLevel]["MaxHp"].ToString());
 
             }
             else
@@ -1175,7 +1209,7 @@ public class DataManager : MonoBehaviour
     {
         int playerPower = 0;
 
-        int playerAtkStat = int.Parse(playerStatCsv[playerData.atkLevel]["atk"].ToString());
+        int playerAtkStat = int.Parse(playerStatCsv[playerData.atkLevel]["Atk"].ToString());
         int equipmentHaveAtk = 0;
         int skillHaveAtk = 0;
 
@@ -1198,7 +1232,7 @@ public class DataManager : MonoBehaviour
     #region 임무관련
     public void LoadAchievementData()
     {
-        string jsonData = File.ReadAllText(Application.persistentDataPath + "/Achievementdata.json"); // 파일에서 JSON 문자열 불러오기
+        string jsonData = File.ReadAllText(achievementDataSavePath/*Application.persistentDataPath + "/Achievementdata.json"*/); // 파일에서 JSON 문자열 불러오기
         achievementData = JsonUtility.FromJson<AchievementDataArray>(jsonData).achievementDataArray; // JSON 문자열을 객체 배열로 역직렬화
 
         //if (File.Exists(saveAchievementDataPath))
@@ -1243,22 +1277,22 @@ public class DataManager : MonoBehaviour
         }
 
         string jsonData = JsonUtility.ToJson(new AchievementDataArray { achievementDataArray = achievementData }); // 객체 배열을 JSON 문자열로 변환
-        File.WriteAllText(Application.persistentDataPath + "/Achievementdata.json", jsonData); // JSON 문자열을 파일로 저장
+        File.WriteAllText(achievementDataSavePath/*Application.persistentDataPath + "/Achievementdata.json"*/, jsonData); // JSON 문자열을 파일로 저장
     }
 
 
     public void SaveAchievementData()
     {
         string jsonData = JsonUtility.ToJson(new AchievementDataArray { achievementDataArray = achievementData }); // 객체 배열을 JSON 문자열로 변환
-        File.WriteAllText(Application.persistentDataPath + "/Achievementdata.json", jsonData); // JSON 문자열을 파일로 저장
+        File.WriteAllText(achievementDataSavePath/*Application.persistentDataPath + "/Achievementdata.json"*/, jsonData); // JSON 문자열을 파일로 저장
     }
 
     public void RemoveAchievementData()
     {
         Debug.Log("Delete Achievement Data");
-        if (File.Exists(Application.persistentDataPath + "/Achievementdata.json"))
+        if (File.Exists(achievementDataSavePath/*Application.persistentDataPath + "/Achievementdata.json"*/))
         {
-            File.Delete(Application.persistentDataPath + "/Achievementdata.json");
+            File.Delete(achievementDataSavePath/*Application.persistentDataPath + "/Achievementdata.json"*/);
         }
     }
 
