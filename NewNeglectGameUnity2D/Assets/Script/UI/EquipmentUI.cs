@@ -28,6 +28,7 @@ public class EquipmentUI : MonoBehaviour
 
     bool isMixAble;
 
+
     //bool isEqClick;
     // RequiredGold
 

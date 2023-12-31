@@ -38,8 +38,6 @@ public class PlayerData
 
     public string equipItemName;                   // 장착중인 아이템
 
-    public GameObject playerObject;
-
     public int currentGold;                         // 현재 골드
                 
     enum EQUIP_TYPE { WEAPON, ARMOUR,END };

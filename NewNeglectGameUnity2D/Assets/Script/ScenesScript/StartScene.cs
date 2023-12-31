@@ -17,6 +17,7 @@ public class StartScene : MonoBehaviour
 
     public void StartButton()
     {
+       // DataManager.GetDataManager().RemoveAllData();
         SoundManager.GetInstance().PlayMenuClickSound();
 
         if (DataManager.GetDataManager().LoadPlayerData()) // 참이면 존재함

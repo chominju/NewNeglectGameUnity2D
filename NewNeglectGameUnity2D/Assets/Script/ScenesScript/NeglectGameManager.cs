@@ -197,22 +197,31 @@ public class NeglectGameManager : MonoBehaviour
     public int OfflineTime()
     {
         int offlineTime = -1;
-        string[] lastLoginLog = DataManager.GetDataManager().LoadlastLoginLog();
-        if (lastLoginLog == null)
+        //string[] lastLoginLog = DataManager.GetDataManager().LoadlastLoginLog();
+
+        DateTimeData getLast = DataManager.GetDataManager().LoadLastLogoutData();
+
+        if (getLast == null)
         {
             // 마지막 로그인 기록이 없을 떄.
             Debug.Log("No lastLoginLog");
             return offlineTime;
         }
+        //if (lastLoginLog == null)
+        //{
+        //    // 마지막 로그인 기록이 없을 떄.
+        //    Debug.Log("No lastLoginLog");
+        //    return offlineTime;
+        //}
         else
         {
             // 마지막으로 저장된 로그인 기록을 가져옴.
-            int loadYear = int.Parse(lastLoginLog[0]);
-            int loadMonth = int.Parse(lastLoginLog[1]);
-            int loadDay = int.Parse(lastLoginLog[2]);
-            int loadHour = int.Parse(lastLoginLog[3]);
-            int loadMinute = int.Parse(lastLoginLog[4]);
-            int loadSecond = int.Parse(lastLoginLog[5]);
+            int loadYear = getLast.year;
+            int loadMonth = getLast.month;
+            int loadDay = getLast.day;
+            int loadHour = getLast.hour;
+            int loadMinute = getLast.minute;
+            int loadSecond = getLast.second;
 
             // 현재시간을 가져옴.
             int currentYear = int.Parse(System.DateTime.Now.ToString("yyyy"));

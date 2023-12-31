@@ -12,7 +12,7 @@ public class AchievementManager : MonoBehaviour
     //private List<AchievementData> achievements;
     //private AchievementData[] achievements;
 
-    private bool isLogin;
+    //private bool isLogin;
     private int enemyKillCount;
     private int accseeingTimeCount;
 
@@ -271,31 +271,31 @@ public class AchievementManager : MonoBehaviour
     }
 
     // 특정 업적의 달성 조건을 확인하는 메서드
-    private void IsSuccessAchievement(AchievementData achievementName)
-    {
-        if (achievementName.achievementName.Equals("Login"))
-        {
-            if(achievementName.isSuccess && achievementName.isReceiveReward)
-            if (isLogin == true)
-                achievementName.isSuccess = true;
-            else
-                achievementName.isSuccess = false;
-        }
-        else if (achievementName.achievementName.Equals("EnmeyKill"))
-        {
-            if (enemyKillCount >= successEnemyKill)
-                achievementName.isSuccess = true;
-            else
-                achievementName.isSuccess = false;
-        }
-        else if (achievementName.achievementName.Equals("AccessingTime"))
-        {
-            if (accseeingTimeCount >= successAccseeingTime)
-                achievementName.isSuccess = true;
-            else
-                achievementName.isSuccess = false;
-        }
-        else
-            Debug.Log("IsSuccessAchievement Func : achievementName is no exist");
-    }
+    //private void IsSuccessAchievement(AchievementData achievementName)
+    //{
+    //    if (achievementName.achievementName.Equals("Login"))
+    //    {
+    //        if(achievementName.isSuccess && achievementName.isReceiveReward)
+    //        if (isLogin == true)
+    //            achievementName.isSuccess = true;
+    //        else
+    //            achievementName.isSuccess = false;
+    //    }
+    //    else if (achievementName.achievementName.Equals("EnmeyKill"))
+    //    {
+    //        if (enemyKillCount >= successEnemyKill)
+    //            achievementName.isSuccess = true;
+    //        else
+    //            achievementName.isSuccess = false;
+    //    }
+    //    else if (achievementName.achievementName.Equals("AccessingTime"))
+    //    {
+    //        if (accseeingTimeCount >= successAccseeingTime)
+    //            achievementName.isSuccess = true;
+    //        else
+    //            achievementName.isSuccess = false;
+    //    }
+    //    else
+    //        Debug.Log("IsSuccessAchievement Func : achievementName is no exist");
+    //}
 }

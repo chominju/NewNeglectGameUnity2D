@@ -2,45 +2,62 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Fixed : MonoBehaviour
 {
-    public static Fixed instance; 
+    // Panel들의 배열
+    public GameObject[] panels;
 
-    public static float setWidth;
-    public static float setheight;
-    private void Start()
+    private void OnEnable()
     {
-        setWidth = Screen.width / 1920.0f;
-        setheight = Screen.height / 1080.0f;
+        // 현재 디스플레이의 가로 해상도
+        int screenWidth = Screen.width;
 
-        Debug.Log(Screen.width);
-        Debug.Log(Screen.height);
-        Debug.Log(setWidth);
-        Debug.Log(setheight);
+        // 현재 디스플레이의 세로 해상도
+        int screenHeight = Screen.height;
 
-        var temp = GetComponent<CanvasScaler>().referenceResolution;
-        GetComponent<CanvasScaler>().referenceResolution= new Vector2(temp.x * setWidth, temp.y * setheight);
-        // SetResolution(); // 초기에 게임 해상도 고정
-    }
+        // 예상 기준 해상도 (1920x1080 등)
+        int referenceWidth = 1920;
+        int referenceHeight = 1080;
 
-    /* 해상도 설정하는 함수 */
-    public void SetResolution()
-    {
-        int setWidth = 1920; // 사용자 설정 너비
-        int setHeight = 1080; // 사용자 설정 높이
+        // 해상도 비율 계산
+        float widthRatio = (float)screenWidth / referenceWidth;
+        float heightRatio = (float)screenHeight / referenceHeight;
 
-        int deviceWidth = Screen.width; // 기기 너비 저장
-        int deviceHeight = Screen.height; // 기기 높이 저장
-
-        Screen.SetResolution(setWidth, (int)(((float)deviceHeight / deviceWidth) * setWidth), true); // SetResolution 함수 제대로 사용하기
-
-        if ((float)setWidth / setHeight < (float)deviceWidth / deviceHeight) // 기기의 해상도 비가 더 큰 경우
+        // Panel 크기 동적 조정
+        foreach (GameObject panel in panels)
         {
-            float newWidth = ((float)setWidth / setHeight) / ((float)deviceWidth / deviceHeight); // 새로운 너비
-            Camera.main.rect = new Rect((1f - newWidth) / 2f, 0f, newWidth, 1f); // 새로운 Rect 적용
-        }
-        else // 게임의 해상도 비가 더 큰 경우
-        {
-            float newHeight = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight); // 새로운 높이
-            Camera.main.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight); // 새로운 Rect 적용
+            RectTransform panelRectTransform = panel.GetComponent<RectTransform>();
+            if (panelRectTransform != null)
+            {
+                // 해상도 비율에 따라 패널 크기 조정
+                panelRectTransform.localScale = new Vector3(panelRectTransform.localScale.x * widthRatio, panelRectTransform.localScale.y * heightRatio, panelRectTransform.localScale.z);
+            }
         }
     }
+
+    //void Start()
+    //{
+    //    // 현재 디스플레이의 가로 해상도
+    //    int screenWidth = Screen.width;
+
+    //    // 현재 디스플레이의 세로 해상도
+    //    int screenHeight = Screen.height;
+
+    //    // 예상 기준 해상도 (1920x1080 등)
+    //    int referenceWidth = 1920;
+    //    int referenceHeight = 1080;
+
+    //    // 해상도 비율 계산
+    //    float widthRatio = (float)screenWidth / referenceWidth;
+    //    float heightRatio = (float)screenHeight / referenceHeight;
+
+    //    // Panel 크기 동적 조정
+    //    foreach (GameObject panel in panels)
+    //    {
+    //        RectTransform panelRectTransform = panel.GetComponent<RectTransform>();
+    //        if (panelRectTransform != null)
+    //        {
+    //            // 해상도 비율에 따라 패널 크기 조정
+    //            panelRectTransform.localScale = new Vector3(panelRectTransform.localScale.x * widthRatio, panelRectTransform.localScale.y * heightRatio, panelRectTransform.localScale.z);
+    //        }
+    //    }
+    //}
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     private static UIManager instance = null;
@@ -242,6 +242,12 @@ public class UIManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
+    public void StartSceneCilck()
+    {
+        DataManager.GetDataManager().SaveAllData();
+    }
+
 
     public bool GetIsResetClick()
     {
