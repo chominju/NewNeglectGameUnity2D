@@ -30,13 +30,9 @@ public class EnemyManager : MonoBehaviour
         if (instance == null)
             instance = this;
 
-        Debug.Log("EnemyManager : Start : " + "InitEnemyPrefab");
         InitEnemyPrefab();
-        Debug.Log("EnemyManager : Start : " + "InitEnemyCanvas");
         InitEnemyCanvas();
-        Debug.Log("EnemyManager : Start : " + "GetCSVEnemyData");
         GetCSVEnemyData();                                                                                  // 적 정보 가져오기
-        Debug.Log("EnemyManager : Start : " + "CreateFieldEnemy");
         CreateFieldEnemy();                                                                                  // 필드 정보 가져오기
         respawnCoroutineList = new Dictionary<string, Coroutine>();
     }
@@ -53,7 +49,6 @@ public class EnemyManager : MonoBehaviour
                 return getData;
             }
         }
-
         return null;
     }
 
@@ -65,10 +60,6 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //foreach(var enemy in enemyList)
-        //{
-        //    if(enemy)
-        //}
     }
 
     public static EnemyManager GetEnemyManager()
@@ -109,14 +100,6 @@ public class EnemyManager : MonoBehaviour
         //enemyList[name].SetActive(false);
     }
 
-    //void EnemyRespawnEnd(string name)
-    //{
-    //    if (!respawnCoroutineList.ContainsKey(name))
-    //        return;
-    //    StopCoroutine(respawnCoroutineList[name]);    
-    //    respawnCoroutineList.Remove(name);
-    //}
-
     public static void EnemyUpdateEvent(string name)
     {
         instance.EnemyRespawnEnd(name);
@@ -143,32 +126,6 @@ public class EnemyManager : MonoBehaviour
     {
         return enemyList;
     }
-
-    //#region Enemy 정보 받아오기
-    //void GetCSVEnemyData()
-    //{
-    //    enemyDataList = DataManager.GetDataManager().GetEnemyCSV();                                                           // 몬스터의 데이터 가져옴
-
-    //    int dataSize = enemyDataList.Count;
-    //    newEnemyData = new EnemyData[dataSize];
-
-
-    //    for(int i=0; i< dataSize; i++)
-    //    {
-    //        CreateEnemeyData(i, enemyDataList[])
-    //    }
-
-    //    foreach (var getEnemyData in enemyDataList)
-    //    {
-    //        finalSavePath = null;
-    //        finalSavePath = DataManager.GetDataManager().GetSaveDataPath() + getEnemyData["EnemyName"].ToString() + ".asset";            // 저장파일 경로 저장
-    //        if (!IsExistEnemyData())                                                                        // 몬스터 데이터가 존재하는가?(스크럽터블 오브젝트)
-    //        {
-    //            CreateEnemyScriptableObject(getEnemyData);                                                  // 없다면 생성
-    //        }
-    //    }
-    //}
-    //#endregion
 
     #region Enemy 정보 받아오기
     void GetCSVEnemyData()
@@ -212,43 +169,6 @@ public class EnemyManager : MonoBehaviour
                 Debug.Log("Enemy Data error");
         }
     }
-
-
-    //#region Enemy 정보 생성하기
-    //void CreateEnemyScriptableObject(Dictionary<string, object> data)
-    //{
-    //    //newEnemyData = ScriptableObject.CreateInstance<EnemyData>();                                        // 스크럽터블 오브젝트 생성
-
-    //    foreach (var key in data.Keys)
-    //    {
-    //        if (key == "EnemyName")
-    //            newEnemyData.enemyName = data[key].ToString();
-    //        else if (key == "Level")
-    //            newEnemyData.level = (int)data[key];
-    //        else if (key == "Hp")
-    //            newEnemyData.hp = (int)data[key];
-    //        else if (key == "MaxHp")
-    //            newEnemyData.maxHp = (int)data[key];
-    //        else if (key == "Exp")
-    //            newEnemyData.exp = (int)data[key];
-    //        else if (key == "Atk")
-    //            newEnemyData.atk = (int)data[key];
-    //        else if (key == "Def")
-    //            newEnemyData.def = (int)data[key];
-    //        else if (key == "Speed")
-    //            newEnemyData.speed = float.Parse(data[key].ToString());
-    //        else if (key == "AnimationSpeed")
-    //            newEnemyData.animationSpeed = float.Parse(data[key].ToString());
-    //        else
-    //            Debug.Log("Enemy Data error");
-    //    }
-
-    //    //AssetDatabase.CreateAsset(newEnemyData, finalSavePath);                                             // 에셋 생성
-
-    //    //EditorUtility.SetDirty(newEnemyData);                                                               // 변경점
-    //    //AssetDatabase.SaveAssets();                                                                         // 변경점 저장
-    //}
-    //#endregion
 
     #region 필드에 적 생성하기.
     void CreateFieldEnemy()

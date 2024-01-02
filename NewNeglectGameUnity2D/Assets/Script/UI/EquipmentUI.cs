@@ -7,6 +7,7 @@ public class EquipmentUI : MonoBehaviour
     private static EquipmentUI instance = null;
 
     public GameObject eqInfoUi;
+    public GameObject PlayerEquipmentUi;
     public Button backButton;
     public Image eqImage;
     public Text eqNameText;
@@ -25,6 +26,7 @@ public class EquipmentUI : MonoBehaviour
     
     public GameObject eqRequiredGoldImage;
     public GameObject levelUpButton;
+    public GameObject equipButton;
 
     bool isMixAble;
 
@@ -39,10 +41,36 @@ public class EquipmentUI : MonoBehaviour
             instance = this;
         currentEquipmentButton = null;
         eqInfoUi.SetActive(false);
-        backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
+        SetBackButtonSize(false);
+        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
         SetEquipmentUI();
         isMixAble = false;
     }
+
+    void SetBackButtonSize(bool clickInfo)
+    {
+        float screenWidth = UIManager.GetUIManager().GetWidthSize();
+        float screenHeight = UIManager.GetUIManager().GetHeightSize();
+        Rect lSize = eqInfoUi.GetComponent<RectTransform>().rect;
+        Rect rSize = PlayerEquipmentUi.GetComponent<RectTransform>().rect;
+        float newWidthSize = 0;
+        //float newHeigthSize = 0;
+        if (clickInfo)
+        {
+            // 장비/스킬를 클릭했을 때(3개의 오브젝트 보이기)
+            newWidthSize = screenWidth - lSize.width - rSize.width;
+            //newHeigthSize = screenHeight - lSize.height - rSize.height;
+        }
+        else
+        {
+            // 장비/스킬을 클릭 안했을 때(2개의 오브젝트만 보이기)
+            newWidthSize = screenWidth - rSize.width;
+            //newHeigthSize = screenHeight - rSize.height;
+        }
+
+        backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidthSize, backButton.GetComponent<RectTransform>().sizeDelta.y);
+    }
+
     void DataUpdateAndTextUpdate()
     {
         SetEquipmentUI();
@@ -73,18 +101,26 @@ public class EquipmentUI : MonoBehaviour
                 GameObject sliderObj = equipmentObject[i].transform.Find("CountSlider").gameObject;
                 GameObject countlTextObj = sliderObj.transform.Find("CountText").gameObject;
 
+                GameObject equipTextObj = equipmentObject[i].transform.Find("EquipText").gameObject;
+
                 if (getData[i].quantity <= 0 && getData[i].isGainItem==false)
                 {
                     equipmentObject[i].GetComponent<Image>().color = Color.gray;
                     levelTextObj.SetActive(false);
                     sliderObj.SetActive(false);
                     countlTextObj.SetActive(false);
+                    equipTextObj.SetActive(false);
                 }
                 else
                 {
                     levelTextObj.SetActive(true);
                     sliderObj.SetActive(true);
                     countlTextObj.SetActive(true);
+
+                    if (DataManager.GetDataManager().GetPlayerEquipItemName().Equals(getData[i].itemName))
+                        equipTextObj.SetActive(true);
+                    else
+                        equipTextObj.SetActive(false);
 
                     equipmentObject[i].GetComponent<Image>().color = Color.white;
                     levelTextObj.GetComponent<Text>().text = "Lv. " + getData[i].itemLevel;
@@ -115,6 +151,25 @@ public class EquipmentUI : MonoBehaviour
         }
     }
 
+    public void EquipButtonClick(Button equipButton)
+    {
+        // 장착하기 버튼 클릭시 
+        string playerEquipItemName = DataManager.GetDataManager().GetPlayerEquipItemName();
+
+        // 현재 클릭중인 장비랑 끼고있는 장비가 같을 때
+        if(currentEquipmentButton.name == playerEquipItemName)
+        {
+            SoundManager.GetInstance().PlayFailSound();
+        }
+        else
+        {
+            SoundManager.GetInstance().PlayClickSound();
+            DataManager.GetDataManager().SetPlayerEquipItemName(currentEquipmentButton.name);
+        }
+        equipButton.GetComponent<Image>().color = Color.gray;
+    }
+
+
     // Update is called once per frame
     void Update()
     {
@@ -133,7 +188,8 @@ public class EquipmentUI : MonoBehaviour
 
     public void CloseEquipmentUI()
     {
-        backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
+        SetBackButtonSize(false);
+        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
         if (eqInfoUi != null)
             eqInfoUi.SetActive(false);
         if (currentEquipmentMixButton != null)
@@ -229,7 +285,8 @@ public class EquipmentUI : MonoBehaviour
 
     void EquipmentInfoText()
     {
-        backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(730, 1080);
+        SetBackButtonSize(true);
+        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(730, 1080);
         eqInfoUi.SetActive(true);
         if (currentEquipmentData.quantity <= 0 && currentEquipmentData.isGainItem == false)
         {
@@ -238,6 +295,7 @@ public class EquipmentUI : MonoBehaviour
             eqRequiredGoldText.text= "";
             eqLevelText.text = "";
             levelUpButton.SetActive(false);
+            equipButton.SetActive(false);
             eqRequiredGoldImage.SetActive(false);
         }
         else
@@ -248,6 +306,15 @@ public class EquipmentUI : MonoBehaviour
             eqLevelText.text = "Lv. " + currentEquipmentData.itemLevel + " / " + currentEquipmentData.itemMaxLevel;
             levelUpButton.SetActive(true);
             eqRequiredGoldImage.SetActive(true);
+            equipButton.SetActive(true);
+
+            if(DataManager.GetDataManager().GetPlayerEquipItemName().Equals(currentEquipmentData.itemName))
+            {
+                equipButton.GetComponent<Image>().color = Color.gray;
+            }
+            else
+                equipButton.GetComponent<Image>().color = Color.green;
+
 
             int requiredGold = int.Parse(currentEquipmentDetailCsv[currentEquipmentData.itemLevel]["RequiredGold"].ToString());
             if (DataManager.GetDataManager().GetPlayerData().currentGold >= requiredGold)

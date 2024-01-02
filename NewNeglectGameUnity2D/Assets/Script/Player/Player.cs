@@ -108,10 +108,11 @@ public class Player : Character
         int playerStatAtk = playerInfo.atk;
         int skillHaveAtk = DataManager.GetDataManager().GetSkillHaveAtk();
         int equipmentHaveAtk = DataManager.GetDataManager().GetEquipmentHaveAtk();
+        int equipmentEquipAtk = DataManager.GetDataManager().GetEquipmentEquipAtk();
         // atk = 공격력 ( 플레이어 atk + 보유스킬 공격력 + 보유무기 공격력)
         // power = 전투력(보이는것 atk + 플레이어스탯)
-        playerInfo.atk = playerInfo.atk + skillHaveAtk + equipmentHaveAtk;
-        playerInfo.power += (skillHaveAtk + equipmentHaveAtk);
+        playerInfo.atk = playerInfo.atk + skillHaveAtk + equipmentHaveAtk + equipmentEquipAtk;
+        playerInfo.power += (skillHaveAtk + equipmentHaveAtk + equipmentEquipAtk);
     }
 
     public void PlayerEquipEquipmentAtk()

@@ -16,7 +16,6 @@ public class GachaUI : MonoBehaviour
     public GameObject[] Gacha30UI;
     public GameObject[] GachaFreeUI;
 
-    //int []equipmentGachaQuantity;
     int []skillGachaQuantity;
 
     int getEquipmentDataSize;
@@ -43,16 +42,12 @@ public class GachaUI : MonoBehaviour
         skillGacha30Price = 3000;
         equipmentGacha30Price = 2500;
 
-        //Gacha30UI = new GameObject[30];
-        //GachaFreeUI = new GameObject[5];
-
         getEquipmentData = DataManager.GetDataManager().GetEquipmentData();
         getSkillData = DataManager.GetDataManager().GetSkillData();
 
         getEquipmentDataSize = getEquipmentData.Length;
         getSkillDataSize = getSkillData.Length;
 
-        //equipmentGachaQuantity = new int[getEquipmentDataSize];
         skillGachaQuantity = new int[getSkillDataSize];
 
         isEquipmentGacha = false;
@@ -71,7 +66,6 @@ public class GachaUI : MonoBehaviour
         {
             instance.SetGoldUI();
             instance.SetGacha30ButtonUI();
-            //Debug.Log("UpdateEvnetTest GachaUI");
         }
     }
 
@@ -198,8 +192,6 @@ public class GachaUI : MonoBehaviour
         if (DataManager.GetDataManager().GetPlayerData().currentGold >= equipmentGacha30Price)
         {
             gacha30UIPanel.SetActive(true);
-            // getEquipmentData = DataManager.GetEquipmentData();
-            //int getEquipmentDataSize = getEquipmentData.Length;
             for (int i = 0; i < 30; i++)
             {
                 int num = Random.Range(0, getEquipmentDataSize);
@@ -213,8 +205,6 @@ public class GachaUI : MonoBehaviour
 
                 Gacha30UI[i].GetComponent<Image>().sprite = getEquipmentData[num].sprite;
                 equipmentGachaQuantity[num]++;
-                // getEquipmentData[num].sprite = Resources.Load()
-
             }
 
             for (int i = 0; i < getEquipmentDataSize; i++)
@@ -270,8 +260,6 @@ public class GachaUI : MonoBehaviour
         if (DataManager.GetDataManager().GetPlayerData().currentGold >= skillGacha30Price)
         {
             gacha30UIPanel.SetActive(true);
-            // getEquipmentData = DataManager.GetEquipmentData();
-            //int getEquipmentDataSize = getEquipmentData.Length;
             for (int i = 0; i < 30; i++)
             {
                 int num = Random.Range(0, getSkillDataSize);
@@ -285,8 +273,6 @@ public class GachaUI : MonoBehaviour
 
                 Gacha30UI[i].GetComponent<Image>().sprite = getSkillData[num].sprite;
                 skillGachaQuantity[num]++;
-                // getEquipmentData[num].sprite = Resources.Load()
-
             }
 
             for (int i = 0; i < getSkillDataSize; i++)
@@ -296,7 +282,6 @@ public class GachaUI : MonoBehaviour
                     DataManager.GetDataManager().GainSkillGacha(getSkillData[i].skillName, skillGachaQuantity[i]);
                 }
             }
-
             DataManager.GetDataManager().GainGold(-skillGacha30Price);
         }
     }
@@ -321,74 +306,4 @@ public class GachaUI : MonoBehaviour
 
     #endregion
 
-
-
-
-    //public void FreeGacha()
-    //{
-    //    if(isEquipmentGacha)
-    //    {
-    //        gachaFreeUIPanel.SetActive(true);
-
-    //        int[] equipmentGachaQuantity = new int[getEquipmentDataSize];
-
-    //        for (int i = 0; i < 5; i++)
-    //        {
-    //            int num = Random.Range(0, getEquipmentDataSize);
-
-    //            // 무기종류 갯수보다 적은수 or 많은 수가 나오면 오류발생.
-    //            if (num < 0 || num >= getEquipmentDataSize)
-    //            {
-    //                Debug.Log("EquipmentGacha30 Error");
-    //                return;
-    //            }   
-
-    //            GachaFreeUI[i].GetComponent<Image>().sprite = getEquipmentData[num].sprite;
-    //            equipmentGachaQuantity[num]++;
-    //            // getEquipmentData[num].sprite = Resources.Load()
-
-    //        }
-
-    //        for (int i = 0; i < getEquipmentDataSize; i++)
-    //        {
-    //            if (equipmentGachaQuantity[i] > 0)
-    //            {
-    //                DataManager.GetDataManager().GainEquipmentGacha(getEquipmentData[i].itemName, equipmentGachaQuantity[i]);
-    //            }
-    //        }
-    //    }
-
-    //    else if(isSkillGacha)
-    //    {
-    //        gachaFreeUIPanel.SetActive(true);
-
-    //        int[] skillGachaQuantity = new int[getSkillDataSize];
-
-    //        for (int i = 0; i < 5; i++)
-    //        {
-    //            int num = Random.Range(0, getSkillDataSize);
-
-    //            // 무기종류 갯수보다 적은수 or 많은 수가 나오면 오류발생.
-    //            if (num < 0 || num >= getSkillDataSize)
-    //            {
-    //                Debug.Log("SkillGachaFree Error");
-    //                return;
-    //            }
-
-    //            GachaFreeUI[i].GetComponent<Image>().sprite = getSkillData[num].sprite;
-    //            skillGachaQuantity[num]++;
-    //        }
-
-    //        for (int i = 0; i < getSkillDataSize; i++)
-    //        {
-    //            if (skillGachaQuantity[i] > 0)
-    //            {
-    //                DataManager.GetDataManager().GainSkillGacha(getSkillData[i].skillName, skillGachaQuantity[i]);
-    //            }
-    //        }
-    //    }
-
-    //    isSkillGacha = false;
-    //    isEquipmentGacha = false; 
-    //}
 }

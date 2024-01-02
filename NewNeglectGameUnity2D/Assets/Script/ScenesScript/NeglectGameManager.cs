@@ -20,8 +20,10 @@ public class NeglectGameManager : MonoBehaviour
     private bool isExistOfflineRewards;
 
     private DateTime loginTime;
+    private DateTime loginRewardDate;
 
     private bool isAlreadyLoginToday;
+
     //private const string loginLogPath = @"Assets\TextFile\LoginLog.txt";
     void Start()
     {
@@ -57,6 +59,16 @@ public class NeglectGameManager : MonoBehaviour
 
         Debug.Log("NeglectManager : Start :" + "CreatePlayerCanvas");
         Invoke("CreatePlayerCanvas", 0.0001f); //CreatePlayerCanvas();
+    }
+
+    private void Update()
+    {
+        DateTime currentDay = DateTime.Now;
+        if (loginRewardDate.Day != currentDay.Day)
+        {
+            loginRewardDate = currentDay;
+            DataManager.GetDataManager().SetAchievementDataIsReceiveReward("Login", false);
+        }
     }
 
     public DateTime GetLoginTime()
@@ -178,6 +190,7 @@ public class NeglectGameManager : MonoBehaviour
         //    DataManager.GetDataManager().SetAchievementDataIsSuccess("Login", true);
         //    DataManager.GetDataManager().SetAchievementDataIsReceiveReward("Login", true);
         //}
+        loginRewardDate = loginTime;
     }
 
     DateTime GetCurrentData()
@@ -198,10 +211,11 @@ public class NeglectGameManager : MonoBehaviour
     {
         int offlineTime = -1;
         //string[] lastLoginLog = DataManager.GetDataManager().LoadlastLoginLog();
-
+        Debug.Log("OfflineTime : B");
         DateTimeData getLast = DataManager.GetDataManager().LoadLastLogoutData();
 
-        if (getLast == null)
+        Debug.Log("OfflineTime : A");
+        if (getLast.year == 0)
         {
             // 마지막 로그인 기록이 없을 떄.
             Debug.Log("No lastLoginLog");
@@ -215,6 +229,8 @@ public class NeglectGameManager : MonoBehaviour
         //}
         else
         {
+            Debug.Log("OfflineTime : C");
+
             // 마지막으로 저장된 로그인 기록을 가져옴.
             int loadYear = getLast.year;
             int loadMonth = getLast.month;
@@ -222,6 +238,15 @@ public class NeglectGameManager : MonoBehaviour
             int loadHour = getLast.hour;
             int loadMinute = getLast.minute;
             int loadSecond = getLast.second;
+            Debug.Log("OfflineTime  loadYear: " + loadYear);
+            Debug.Log("OfflineTime  loadMonth: " + loadMonth);
+            Debug.Log("OfflineTime  loadDay: " + loadDay);
+            Debug.Log("OfflineTime  loadHour: " + loadHour);
+            Debug.Log("OfflineTime  loadMinute: " + loadMinute);
+            Debug.Log("OfflineTime  loadSecond: " + loadSecond);
+
+
+
 
             // 현재시간을 가져옴.
             int currentYear = int.Parse(System.DateTime.Now.ToString("yyyy"));
@@ -230,13 +255,19 @@ public class NeglectGameManager : MonoBehaviour
             int currentHour = int.Parse(System.DateTime.Now.ToString("HH"));
             int currentMinute = int.Parse(System.DateTime.Now.ToString("mm"));
             int currentSecond = int.Parse(System.DateTime.Now.ToString("mm"));
-
+            Debug.Log("OfflineTime : D");
 
             DateTime loadDate = new DateTime(loadYear, loadMonth, loadDay, loadHour, loadMinute, loadSecond); // 시작 날짜
+            Debug.Log("OfflineTime : DDDD");
+
             DateTime currentDate = new DateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute, currentSecond); // 시작 날짜
+            Debug.Log("OfflineTime : E");
             loginTime = currentDate;
+
+            Debug.Log("OfflineTime : F");
             TimeSpan duration = currentDate - loadDate; // 두 날짜 사이의 시간 간격 계산
 
+            Debug.Log("OfflineTime : G");
             // 오프라인 일 , 시간 , 분 , 초 가져오기.
             int offlineDay = duration.Days;
             int offlineHours = duration.Hours;

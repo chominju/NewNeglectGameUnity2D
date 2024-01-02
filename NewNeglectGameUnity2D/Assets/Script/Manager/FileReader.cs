@@ -19,7 +19,6 @@ public class FileReader : MonoBehaviour
         Debug.Log("FileReader Exist : " + newPath);
         TextAsset data = Resources.Load(newPath) as TextAsset;
 
-
         var lines = Regex.Split(data.text, LINE_SPLIT_RE);
 
         if (lines.Length <= 1)
@@ -49,7 +48,6 @@ public class FileReader : MonoBehaviour
                     finalvalue = f;
                 }
                 entry[header[j]] = finalvalue;
-            Debug.Log("FileReader reading : " + newPath + "  Value : "+value +"   finalValue : "+ finalvalue.ToString());
             }
             list.Add(entry);
         }
@@ -62,7 +60,6 @@ public class FileReader : MonoBehaviour
         var list = new List<Dictionary<string, object>>();
         //TextAsset data = Resources.Load (file) as TextAsset;
 
-        Debug.Log("FileReader : " + Application.streamingAssetsPath + "\\Csv\\" + file + ".csv");
         string source;
         StreamReader sr = new StreamReader(Application.streamingAssetsPath+ "\\Csv\\" + file +".csv");
         source = sr.ReadToEnd();
@@ -108,11 +105,6 @@ public class FileReader : MonoBehaviour
 
 
 
-
-
-
-
-
     #region TXTRedaer ÇÔ¼ö
     public static string ReadTXTFile(string filePath)
     {
@@ -142,16 +134,4 @@ public class FileReader : MonoBehaviour
         writer.Close();
     }
     #endregion
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

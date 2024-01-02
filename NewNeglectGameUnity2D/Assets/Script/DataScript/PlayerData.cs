@@ -19,19 +19,6 @@ public class PlayerData
     public int statPoint;
 
     public float animationSpeed;                 // 애니메이션 속도(공격속도)
-                                                     //public int playerLevel = 1;                      // 플레이어 레벨
-                                                     //public int atkLevel = 1;                        // 공격력 스탯 레벨
-                                                     //public int defLevel = 1;                        // 방어력 스탯 레벨
-                                                     //public int moveSpeedLevel = 1;                 // 이동속도 스탯 레벨
-                                                     //public int maxHpLevel = 1;                     // 최대 체력 스탯 레벨
-                                                     //public int maxMpLevel = 1;                     // 최대 마나 스탯 레벨
-
-    //public int currentExp = 0;                         // 현재 경험치
-    //public int statPoint = 0;
-
-    //public float animationSpeed = 2;                 // 애니메이션 속도(공격속도)
-    //public int power = 0;                              // 전투력
-
 
     public List<GameObject> takeSkills;              // 가지고 있는 스킬
     public string[] skillPreset;                    // 스킬 프리셋

@@ -33,7 +33,9 @@ public class PlayerInfoUI : MonoBehaviour
     Player.PlayerInfoData playerInfoData;
     List<Dictionary<string, object>> getStatCsv;
 
-    
+    public GameObject playerInfoUi;
+    public Button backButton;
+    public GameObject playerStatUi;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +47,32 @@ public class PlayerInfoUI : MonoBehaviour
         playerInfoData = player.GetComponent<Player>().GetPlayerInfo();
 
         getStatCsv = DataManager.GetDataManager().GetStatCSV();
+        SetBackButtonSize(true);
         UpdateData();
+    }
+
+    void SetBackButtonSize(bool clickInfo)
+    {
+        float screenWidth = UIManager.GetUIManager().GetWidthSize();
+        float screenHeight = UIManager.GetUIManager().GetHeightSize();
+        Rect lSize = playerInfoUi.GetComponent<RectTransform>().rect;
+        Rect rSize = playerStatUi.GetComponent<RectTransform>().rect;
+        float newWidthSize = 0;
+        //float newHeigthSize = 0;
+        if (clickInfo)
+        {
+            // 장비/스킬를 클릭했을 때(3개의 오브젝트 보이기)
+            newWidthSize = screenWidth - lSize.width - rSize.width;
+            //newHeigthSize = screenHeight - lSize.height - rSize.height;
+        }
+        else
+        {
+            // 장비/스킬을 클릭 안했을 때(2개의 오브젝트만 보이기)
+            newWidthSize = screenWidth - rSize.width;
+            //newHeigthSize = screenHeight - rSize.height;
+        }
+
+        backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidthSize, backButton.GetComponent<RectTransform>().sizeDelta.y);
     }
 
     public static void PlayerInfoUIUpdateEvent()
@@ -56,15 +83,6 @@ public class PlayerInfoUI : MonoBehaviour
             //Debug.Log("UpdateEvnetTest PlayerInfoUI");
         }
     }
-
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    TextUpdate();
-    //    UpDataPlayerData();
-    //    UpdatePlayerInfoMenu();
-    //}
 
     void UpdateData()
     {
@@ -77,14 +95,6 @@ public class PlayerInfoUI : MonoBehaviour
     {
         playerInfoData = player.GetComponent<Player>().GetPlayerInfo();
     }
-
-    void DataUpdate()
-    {
-        //SetText();
-        //EquipmentInfoText();
-    }
-
-
     public void TextUpdate()
     {
         if (playerInfoPowerText.IsActive())

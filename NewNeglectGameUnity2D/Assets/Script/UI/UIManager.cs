@@ -38,6 +38,9 @@ public class UIManager : MonoBehaviour
 
     bool isMenuCilck;
 
+    float widthSize;
+    float heightSize;
+
     public static UIManager GetUIManager()
     {
         return instance;
@@ -59,6 +62,19 @@ public class UIManager : MonoBehaviour
         SetPowerUI();
         SetGoldUI();
         ShowNeglectRewardPanel();
+
+        widthSize = gameObject.GetComponent<RectTransform>().rect.width;
+        heightSize = gameObject.GetComponent<RectTransform>().rect.height;
+    }
+
+    public float GetWidthSize()
+    {
+        return widthSize;
+    }
+
+    public float GetHeightSize()
+    {
+        return heightSize;
     }
 
     // Update is called once per frame
