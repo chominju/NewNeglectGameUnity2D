@@ -20,8 +20,6 @@ public class AchievementManager : MonoBehaviour
     public GameObject []achievementRewardTexts;
     public GameObject []achievementBackground;
 
-    // 업적 달성을 확인하고 업적 상태를 업데이트하는 메서드
-
     private void Start()
     {
         if (instance == null)
@@ -36,11 +34,12 @@ public class AchievementManager : MonoBehaviour
 
     void SetBackButtonSize()
     {
+        // canvas 크기를 가져오기.
         float screenWidth = UIManager.GetUIManager().GetWidthSize();
         float screenHeight = UIManager.GetUIManager().GetHeightSize();
         Rect rSize = achievementUi.GetComponent<RectTransform>().rect;
         float newWidthSize = 0;
-        //float newHeigthSize = 0;
+
         // 장비/스킬를 클릭했을 때(3개의 오브젝트 보이기)
         newWidthSize = screenWidth - rSize.width;
         //newHeigthSize = screenHeight - lSize.height - rSize.height;
@@ -63,7 +62,7 @@ public class AchievementManager : MonoBehaviour
 
         if(totalMinutes >=1)
         {
-            Debug.Log("AccessingTime : " + totalMinutes);
+            //Debug.Log("AccessingTime : " + totalMinutes);
             DataManager.GetDataManager().UpdateAchievementData("AccessingTime", true, totalMinutes);
         }
 

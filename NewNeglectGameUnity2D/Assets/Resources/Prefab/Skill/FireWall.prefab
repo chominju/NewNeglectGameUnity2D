@@ -125,7 +125,7 @@ MonoBehaviour:
   modifyPosY: 0
   damageInterval: 0
   isSummon: 0
-  isTargetToEnemy: 0
+  isTargetToEnemy: 1
   isFollowEnemy: 0
   curState: 0
 --- !u!61 &-8934406118075809136

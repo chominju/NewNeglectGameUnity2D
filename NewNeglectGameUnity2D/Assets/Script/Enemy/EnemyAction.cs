@@ -3,36 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-delegate void EnemeyUpdateData(string name);
+delegate void UpdateDataEnemyAction(string name);
 
 public class EnemyAction : Action
 {
-    // Start is called before the first frame update
-    public bool isChasePlayer;
-
-    Coroutine playerChaseCoroutine;                                             // 이동 코루틴 참조 저장
-
-    Transform playerTransform;                                                    // 플레이어위치 받아오기
+    Transform playerTransform;                                              // 플레이어위치 받아오기
 
     float currentAngle;                                                     // 기존각도에 새로운 각도를 더함
 
-    Vector3 endPosition;                    // 최종 목적지
-    Vector3 prePosition;                    // 이전 목적지
-    Vector3 startPosition;                  // 처음 위치(고정)
+    Vector3 endPosition;                                                    // 최종 목적지
+    Vector3 prePosition;                                                    // 이전 목적지
+    Vector3 startPosition;                                                  // 처음 위치(고정)
 
-    CircleCollider2D circleCollider2D;
-    CircleCollider2D sensorCollider2D;
+    CircleCollider2D circleCollider2D;                                      // 피격범위 콜라이더
+    CircleCollider2D sensorCollider2D;                                      // 센서(플레이어 감지) 콜라이더
 
-    bool isTriggerPlayer;
+    bool isTriggerPlayer;                                                   // 플레이어랑 충돌했는가
 
-    Enemy enemyCompoenet;
+    Enemy enemyCompoenet;                                                   // Enemy 컴포넌트
 
-    public GameObject canvas;
-    GameObject player;
+    GameObject player;                                                      // 플레이어 오브젝트
+    GameObject damagePrefab;                                                // 데미지 프리팹
+    public GameObject canvasDamageObject;                                   // 데미지 띄우려는 캔버스
 
-    private event EnemeyUpdateData enemyRespawnEvent;
+    private event UpdateDataEnemyAction enemyRespawnEvent;                  // 리스폰관련 delegate
 
-    GameObject damagePrefab;
 
     void Start()
     {
@@ -43,7 +38,7 @@ public class EnemyAction : Action
         StartCoroutine(CharacterAction());
         enemyCompoenet = GetComponent<Enemy>();
         player = GameObject.Find("Player");
-        enemyRespawnEvent += EnemyManager.EnemyUpdateEvent;
+        enemyRespawnEvent += EnemyManager.EnemyRespawnEndEvent;
 
         damagePrefab = Resources.Load<GameObject>("Prefab/DamageObject");
     }
@@ -99,7 +94,6 @@ public class EnemyAction : Action
         while (true)
         {
             damage = player.GetComponent<Player>().playerInfo.atk;
-            // StartCoroutine(ChanageColorCharacter(interval/2.0f));
             if (enemyCompoenet.GetHp() <= 0)
             {
                 enemyCompoenet.SetDead(true);
@@ -116,28 +110,24 @@ public class EnemyAction : Action
     {
         enemyCompoenet.SetHp(-damage);
 
-        if (canvas == null)
-            canvas = GameObject.Find("EnemyCanvas");
+        if (canvasDamageObject == null)
+            canvasDamageObject = GameObject.Find("EnemyCanvas");
 
-        GameObject damageObject = Instantiate(damagePrefab, canvas.transform);
+        GameObject damageObject = Instantiate(damagePrefab, canvasDamageObject.transform);
         damageObject.GetComponent<Damage>().SetDamagePos(transform.position);
         damageObject.GetComponent<Damage>().SetDamage(damage, false);  
-        //DamageUIManager.CreateNGUILabel(transform.position, damage,false);
     }
 
     public void PlayerDamage(int damage)
     {
-
         enemyCompoenet.SetHp(-damage);
 
+        if (canvasDamageObject == null)
+            canvasDamageObject = GameObject.Find("EnemyCanvas");
 
-        if (canvas == null)
-            canvas = GameObject.Find("EnemyCanvas");
-
-        GameObject damageObject = Instantiate(damagePrefab , canvas.transform);
+        GameObject damageObject = Instantiate(damagePrefab , canvasDamageObject.transform);
         damageObject.GetComponent<Damage>().SetDamagePos(transform.position);
         damageObject.GetComponent<Damage>().SetDamage(damage,true);
-        //DamageUIManager.CreateNGUILabel(transform.position, damage, true);
     }
 
     public IEnumerator Respawn()
@@ -145,7 +135,6 @@ public class EnemyAction : Action
         yield return new WaitForSeconds(enemyCompoenet.GetRespawnTime());
         gameObject.SetActive(true);
         enemyRespawnEvent(gameObject.name);
-        //GameObject.Find("NeglectGameManager").SendMessage("EnemyRespawnEnd", gameObject.name);
     }
 
 
@@ -153,7 +142,6 @@ public class EnemyAction : Action
     {
         while (true)
         {
-            //Debug.Log("Enemy " + enemyCompoenet.GetEnemyData().enemyName);
             GetWanderPos();
 
             if (moveCoroutine != null)
@@ -216,16 +204,13 @@ public class EnemyAction : Action
                     if (this.GetComponent<Transform>().position.x >= endPosition.x)
                     {
                         animator.SetFloat("DirX", 0);
-                        //Debug.Log(charaterData.CharaterName  + "왼쪽 이동 ");
                     }
                     else
                     {
                         animator.SetFloat("DirX", 1);
-                        //Debug.Log(charaterData.CharaterName + "오른쪽 이동 ");
 
                     }
                     prePosition = endPosition;
-                    //Debug.Log(enemyData.enemyName + "목적지 받아옴 ");
                 }
 
             }
@@ -234,7 +219,6 @@ public class EnemyAction : Action
 
         animator.SetBool("isWalk", false);                                                                   // 목적지에 도착함(적과 플레이어의 거리가 0보다 작아짐) 대기상태로 변환
         animator.enabled = false;
-        //Debug.Log(enemyData.enemyName + "목적지 도착 ");
     }
 
     private void OnDrawGizmos()
@@ -255,9 +239,9 @@ public class EnemyAction : Action
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 센서와 플레이어와 충돌
         if (collision.gameObject.CompareTag("Player"))
         {
-            //Debug.Log(enemyData.enemyName + "플레이어와 트리거 시작 ");
             isTriggerPlayer = true;
             SetTarget();
         }

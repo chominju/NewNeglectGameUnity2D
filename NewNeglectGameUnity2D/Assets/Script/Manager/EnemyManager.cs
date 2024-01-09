@@ -51,17 +51,6 @@ public class EnemyManager : MonoBehaviour
         }
         return null;
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     public static EnemyManager GetEnemyManager()
     {
         return instance;
@@ -69,23 +58,23 @@ public class EnemyManager : MonoBehaviour
 
     public static void EnemyDeadUpdateEvent(string name)
     {
+        // 적이 죽었을 때 발생하는 delegate
         if (instance != null)
         {
             instance.EnemyDead(name);
-            //Debug.Log("UpdateEvnetTest UIManager");
         }
     }
 
-
-
     void InitEnemyPrefab()
     {
+        // 적 프리펩 초기화
         skullPrefab = Resources.Load<GameObject>("Prefab/Enemy/Skull");
         dogPrefab = Resources.Load<GameObject>("Prefab/Enemy/Dog");
     }
 
     void InitEnemyCanvas()
     {
+        // 적 캔버스 초기화 
         enemyCanvas = Resources.Load<GameObject>("Prefab/Canvas/EnemyCanvas");
         var canvas = Instantiate(enemyCanvas);
         canvas.name = "EnemyCanvas";
@@ -93,28 +82,33 @@ public class EnemyManager : MonoBehaviour
 
     void EnemyDead(string name)
     {
+        // 적이 죽어있는 List모음에 이름이 있는지
         if (respawnCoroutineList.ContainsKey(name))
             return;
+        // List에 없다면 코루틴 실행 , 리스폰 관련 List에 추가
         var newRespawnCoroutine = StartCoroutine(enemyList[name].GetComponent<EnemyAction>().Respawn());
         respawnCoroutineList.Add(name, newRespawnCoroutine);
-        //enemyList[name].SetActive(false);
     }
 
-    public static void EnemyUpdateEvent(string name)
+    public static void EnemyRespawnEndEvent(string name)
     {
         instance.EnemyRespawnEnd(name);
     }
 
     void EnemyRespawnEnd(string name)
     {
+        // 적이 죽어있는 List모음에 이름이 있는지
         if (!respawnCoroutineList.ContainsKey(name))
             return;
+
+        // List에 있다면 그 코루틴 종료. 리스폰 관련 List에서 삭제
         StopCoroutine(respawnCoroutineList[name]); 
         respawnCoroutineList.Remove(name);
     }
 
     public static bool IsExistEnemy()
     {
+        // 적이 1명이라도 존재하는지.
         foreach(var enemyObject in enemyList)
         {
             if (enemyObject.Value.activeSelf)
@@ -188,24 +182,27 @@ public class EnemyManager : MonoBehaviour
 
             if (enemyName == "Skull")
             {
-                enemyObject = Instantiate(skullPrefab);                                   // 해골 생성
+                enemyObject = Instantiate(skullPrefab);                                   // 스컬 생성
                 enemyObject.GetComponent<Enemy>().SetName(skullPrefab.name + skullNum);
-                //enemyObject.name = skullPrefab.name + skullNum;
                 skullNum++;
             }
             else if (enemyName == "Dog")
             {
-                enemyObject = Instantiate(dogPrefab);                                     // 강아지 10마리 생성
+                enemyObject = Instantiate(dogPrefab);                                     // 개 생성
                 enemyObject.GetComponent<Enemy>().SetName(dogPrefab.name + dogNum);
-                //enemyObject.name = dogPrefab.name + dogNum;
                 dogNum++;
             }
             else
+            {
                 Debug.Log("Enemy Data Name Error");
+                continue;
+            }
 
             if (enemyObject == null)
                 return;
 
+
+            // 몬스터 초기 위치 설정.
             Vector2 monsterPos = new Vector2();
             monsterPos.x = float.Parse(getEnemyFieldData["PosX"].ToString());
             monsterPos.y = float.Parse(getEnemyFieldData["PosY"].ToString());
@@ -213,17 +210,11 @@ public class EnemyManager : MonoBehaviour
             enemyObject.GetComponent<EnemyAction>().SetStartPos(monsterPos);
             enemyObject.GetComponent<Enemy>().SetDrop(getEnemyFieldData["DropItem"].ToString(), int.Parse(getEnemyFieldData["DropGold"].ToString()));
 
+            if (enemyList.ContainsKey(enemyObject.name))
+                continue;
+
             enemyList.Add(enemyObject.name, enemyObject);                                                 // 활성화 후 리스트에 추가
         }
     }
     #endregion
-
-    #region 스크럽터블 오브젝트 존재여부
-    //bool IsExistEnemyData()
-    //{
-    //    EnemyData enemyData = AssetDatabase.LoadAssetAtPath(finalSavePath, typeof(EnemyData)) as EnemyData; // 해당 경로에 스크럽터블 오브젝트가 있는지
-    //    return enemyData != null;                                                                           // 있으면 true
-    //}
-    #endregion
-
 }

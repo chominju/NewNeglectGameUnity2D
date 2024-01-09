@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TornadoSkill : MonoBehaviour
+public class FireBallSkill : MonoBehaviour
 {
     float moveSpeed;
     public GameObject target;                                            // 타켓
@@ -12,20 +12,20 @@ public class TornadoSkill : MonoBehaviour
     void Start()
     {
         moveSpeed = 0.5f;
-        StartCoroutine(TornadoAction());
+        StartCoroutine(FireBallAction());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GetComponent<Skill>().getState() == Skill.STATE.ATTACK)
+        if (GetComponent<Skill>().getState() == Skill.STATE.ATTACK)
         {
             if (moveCoroutine != null)
                 StopCoroutine(moveCoroutine);
         }
     }
 
-    IEnumerator TornadoAction()
+    IEnumerator FireBallAction()
     {
         while (true)
         {
@@ -50,17 +50,12 @@ public class TornadoSkill : MonoBehaviour
             }
             else
             {
-                //if (target == null || target.activeSelf == false)
-                //{
-                    //Debug.Log("타켓설정 중");
-                    //if (curCoroutine != null)
-                    //    StopCoroutine(curCoroutine);
-                    if (GetComponent<Skill>().getState() == Skill.STATE.IDLE)
-                    {
-                        Debug.Log("Tornado Skill // SET TARGET");
+                if (GetComponent<Skill>().getState() == Skill.STATE.IDLE)
+                {
+                    Debug.Log("Tornado Skill // SET TARGET");
 
-                        SetTarget();
-                    }
+                    SetTarget();
+                }
 
                 //}
 
@@ -74,12 +69,8 @@ public class TornadoSkill : MonoBehaviour
                 {
                     Debug.Log("Tornado Skill // MOVE");
 
-                    moveCoroutine = StartCoroutine(TornadoMove());                             // 이동
+                    moveCoroutine = StartCoroutine(FireBallMove());                             // 이동
                 }
-                                                                                        //{
-                                                                                        //    curState = STATE.ATTACK;
-                                                                                        //    curCoroutine = StartCoroutine(AttackToMonster());
-                                                                                        //}
             }
             yield return new WaitForFixedUpdate();// WaitForSeconds(Update);
         }
@@ -107,9 +98,9 @@ public class TornadoSkill : MonoBehaviour
     }
 
 
-    public IEnumerator TornadoMove()
+    public IEnumerator FireBallMove()
     {
-        Debug.Log("Tornado Target : " + target.name);
+        Debug.Log("FireBall Target : " + target.name);
         Vector3 TornadoPos = this.GetComponent<Transform>().position;
         Vector3 TargetPos = target.GetComponent<Transform>().position;
 
@@ -123,14 +114,29 @@ public class TornadoSkill : MonoBehaviour
         {
             if (dist > float.Epsilon)
             {
+
+                if (direction.x < 0)
+                    GetComponent<SpriteRenderer>().flipX = true;
+                else
+                    GetComponent<SpriteRenderer>().flipX = false;
                 moveSpeed = 0.5f;
+                //Debug.Log("이동 중");
+                // 이동중
                 GetComponent<Skill>().SetState(Skill.STATE.MOVE);
 
                 transform.Translate(direction * moveSpeed * Time.deltaTime);
+
+                //Vector3 newPosition = Vector3.MoveTowards(gameObject.transform.position, TargetPos, moveSpeed * Time.deltaTime);   // MoveTowards 리지드바디 2D의 움직임을 계산.
+
+                //rb2D.MovePosition(newPosition);
             }
             else
                 moveSpeed = 0.0f;
             yield return new WaitForFixedUpdate();
         }
+
+        //else
+        //Debug.Log("이동완료");
+        // 이동완료
     }
 }

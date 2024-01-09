@@ -1,4 +1,4 @@
 ﻿AchievementName,Description,SuccessCount,Reward,IsLoop
-Login,게임 접속하기,1,1000,0
+Login,게임 접속하기,1,3000,0
 AccessingTime,게임 접속시간,3,10,1
 EnemyKill,몬스터 사냥하기,20,100,1

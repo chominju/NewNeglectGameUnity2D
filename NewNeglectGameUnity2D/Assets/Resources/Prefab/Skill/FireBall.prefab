@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4642490779191281873}
   - component: {fileID: 8647689476060474309}
   - component: {fileID: 5906738452243108803}
+  - component: {fileID: -1817023707088063841}
   m_Layer: 13
   m_Name: FireBall
   m_TagString: Untagged
@@ -123,10 +124,10 @@ MonoBehaviour:
   skillName: FireBall
   modifyPosX: 1
   modifyPosY: 0.3
-  damageInterval: 0
-  isSummon: 0
+  damageInterval: 1
+  isSummon: 1
   isTargetToEnemy: 0
-  isFollowEnemy: 1
+  isFollowEnemy: 0
   curState: 0
 --- !u!61 &8647689476060474309
 BoxCollider2D:
@@ -179,8 +180,21 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.57457554, y: -0.43516076}
-      - {x: 0.58493125, y: 0.42958647}
+    - - {x: 0.6362166, y: -0.46598127}
+      - {x: 0.65684587, y: 0.39876592}
       - {x: -0.10309821, y: 0.464668}
       - {x: -0.94831145, y: -0.022152267}
       - {x: 0.019003935, y: -0.48734975}
+--- !u!114 &-1817023707088063841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5301132479184668092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e972ff4455495ba4f8a2f400a622ccc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}

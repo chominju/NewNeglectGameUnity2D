@@ -114,7 +114,7 @@ public class SkillUI : MonoBehaviour
                 GameObject sliderObj = skillObject[i].transform.Find("CountSlider").gameObject;
                 GameObject countlTextObj = sliderObj.transform.Find("CountText").gameObject;
 
-                if (getData[i].quantity <= 0)
+                if (getData[i].quantity <= 0 && !getData[i].isGainSkill)
                 {
                     skillObject[i].GetComponent<Image>().color = Color.gray;
                     levelTextObj.SetActive(false);

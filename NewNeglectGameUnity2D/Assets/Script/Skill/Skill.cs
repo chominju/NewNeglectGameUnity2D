@@ -170,9 +170,9 @@ public STATE getState()
             {
                 Destroy(gameObject);
             }
-            if (playerTargetPos != null)
+            if (playerTargetPos != null && playerTarget!=null)
             {
-                if(direction.x<0)
+                if (direction.x < 0)
                     GetComponent<SpriteRenderer>().flipX = true; // 왼쪽으로 이동
                 else
                     GetComponent<SpriteRenderer>().flipX = false; // 오른쪽으로 이동
@@ -182,13 +182,19 @@ public STATE getState()
                 {
                     moveTimer += Time.deltaTime;
                     float t = Mathf.Clamp01(moveTimer / animationClipLength); // 보간 비율 (0부터 1까지)
-                    
+
                     // 보간된 위치 계산
                     Vector3 interpolatedPosition = Vector3.Lerp(transform.position, playerTargetPos, t);
 
                     // 오브젝트를 보간된 위치로 이동
                     transform.position = interpolatedPosition;
                 }
+            }
+            else
+            {
+                SetSkillPos();
+                moveTimer = 0.0f;
+                //Destroy(gameObject);
             }
         }
 
@@ -329,6 +335,7 @@ public STATE getState()
             Debug.Log("No PlayerTarget(Skill.cs)");
             return;
         }
+
         playerTargetPos = playerTarget.GetComponent<Transform>().position;
         Debug.Log("Player Target(Skill.cs) : " + playerTarget.name);
 

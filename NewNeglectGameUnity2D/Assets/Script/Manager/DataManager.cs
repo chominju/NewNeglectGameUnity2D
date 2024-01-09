@@ -61,8 +61,6 @@ public class DataManager : MonoBehaviour
 
     private void Start()
     {
-
-        Debug.Log("DataManagerStart");
         if (instance == null)
             instance = this;
 
@@ -567,10 +565,6 @@ public class DataManager : MonoBehaviour
     #endregion
 
     #region 로그인 관련
-    public string GetLoginLog()
-    {
-        return loginLogText;
-    }
     public void SaveLoginOutLog(string inOut)
     {
         Debug.Log("로그인 기록 Text 파일 찾는중...");
@@ -628,37 +622,6 @@ public class DataManager : MonoBehaviour
             Debug.Log("lastLogoutData : " + lastLogoutData);
         }
         return lastLogoutData;
-    }
-
-
-
-
-    public string[] LoadlastLoginLog()
-    {
-        string[] temp = new string[6];
-        int index = 0;
-        if (File.Exists(lastLogoutLogPath))
-        {
-            using (StreamReader reader = new StreamReader(lastLogoutLogPath))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    temp[index] = line;
-                    index++;
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("파일이 존재하지 않습니다.");
-            return null;
-        }
-
-        if (index != 6)
-            return null;
-        else
-            return temp;
     }
 
      public void RemoveAllLoginoutLog()
