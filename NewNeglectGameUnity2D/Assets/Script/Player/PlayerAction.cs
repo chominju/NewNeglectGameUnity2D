@@ -45,74 +45,33 @@ public class PlayerAction : Action
     public float GetAtkSpeed()
     {
         return playerAtkSpeed;
-    }    
+    }
 
     // Update is called once per frame
     void Update()
     {
-        //SetAnimation();
-        //Action();
 
-        //animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f
     }
 
     private void FixedUpdate()
     {
         //Action();
     }
-    //public float GetAtkSpeed()
-    //{
-    //    return playerAtkSpeed;
-    //}
-    //void SetAnimation()
-    //{
-    //    switch (curState)
-    //    {
-    //        case STATE.IDLE:
-    //            {
-    //                Idle();
-    //                break;
-    //            }
-    //        case STATE.WALK:
-    //            {
-    //                Walk();
-    //                break;
-    //            }
-    //        case STATE.ATTACK:
-    //            {
-    //                Attack();
-    //                //curCoroutine = StartCoroutine(AttackToMonster());
-    //                break;
-    //            }
-    //    }
-    //}
 
     public override IEnumerator CharacterAction()
     {
         while (true)
         {
-            //if (target != null)
-            //    Debug.Log("Player Target : " + target.name);
-            //else
-            //    Debug.Log("Player Target No");
-            //Debug.Log("상태 : " + curState);
             SetAnimation();
 
             if (!EnemyManager.IsExistEnemy())                              // 몬스터가 없다면
             {
                 curState = STATE.IDLE;
-                //Debug.Log("몬스터가 없다:");
             }
             else
             {
-                //if (target == null || target.activeSelf == false)
-                //{
-                    //Debug.Log("타켓설정 중");
-                    //if (curCoroutine != null)
-                    //    StopCoroutine(curCoroutine);
-                    if (curState == STATE.IDLE)
-                        SetTarget();
-                //}
+                if (curState == STATE.IDLE)
+                    SetTarget();
 
                 if (moveCoroutine != null)
                 {
@@ -122,25 +81,16 @@ public class PlayerAction : Action
 
                 if (curState != STATE.ATTACK)
                     moveCoroutine = StartCoroutine(Move());                             // 이동
-                                                        //{
-                                                        //    curState = STATE.ATTACK;
-                                                        //    curCoroutine = StartCoroutine(AttackToMonster());
-                                                        //}
+                                                                                        //{
+                                                                                        //    curState = STATE.ATTACK;
+                                                                                        //    curCoroutine = StartCoroutine(AttackToMonster());
+                                                                                        //}
             }
             yield return new WaitForFixedUpdate();// WaitForSeconds(Update);
         }
     }
 
 
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //if (collision.gameObject.CompareTag("Enemy"))
-        //{
-        //    StartCoroutine(CharacterDamage(collision.gameObject.GetComponent<Enemy>().GetAtk(), 0.3f));
-        //}
-    }
 
 
 
@@ -210,8 +160,6 @@ public class PlayerAction : Action
         {
             if (dist > float.Epsilon)
             {
-                //Debug.Log("이동 중");
-                // 이동중
                 curState = STATE.WALK;
                 Vector3 newPosition = Vector3.MoveTowards(rb2D.position, TargetPos, moveSpeed * Time.deltaTime);   // MoveTowards 리지드바디 2D의 움직임을 계산.
 
@@ -229,39 +177,17 @@ public class PlayerAction : Action
         curState = STATE.ATTACK;
         if (animator.GetBool("isAttack"))
         {
-            //Debug.Log("공격 중");
             StartCoroutine(target.GetComponent<EnemyAction>().CharacterDamage(atk, animator.speed));
             yield return new WaitForSeconds(animator.speed);
             AttackOff();
-            //Debug.Log("공격 끝");
         }
+
+
     }
 
     public override IEnumerator CharacterDamage(int damage, float interval)
     {
-        while (true)
-        {
-            StartCoroutine(ChanageColorCharacter(interval));                            // 코루틴 시작(피격시 색 변경)
-
-            //if (playerComponent.GetPlayerInfo().def >= damage)                                       // 플레이어의 방어력 > 적의 공격력
-            //    damage = 1;                                                     // 데미지를 1로 고정
-            //else
-            //    damage -= playerComponent.GetPlayerInfo().def;                                       // 아니라면 적의공격력 - 방어력
-
-            ////playerInfo.currentHp -= damage;
-
-            //if (playerComponent.GetHp() <= 0)
-            //{
-            //    playerComponent.SetDead(true);
-            //    Debug.Log("player Die");
-            //    //KillCharacter();
-            //    break;
-            //}
-            //else
-            //    playerComponent.SetHp(-damage);
-
-                yield return new WaitForSeconds(interval);
-        }
-        //yield return new WaitForSeconds(1);
+        Debug.Log("CharacterDamage");
+        yield return new WaitForSeconds(interval);
     }
 }

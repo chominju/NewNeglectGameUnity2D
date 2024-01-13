@@ -295,28 +295,6 @@ public STATE getState()
         skillDetail = DataManager.GetDataManager().GetSkillDetailCsv(skillName);
 
         SetSkillPos();
-        //GameObject getPlayer = GameObject.Find("Player");
-        //if (getPlayer == null)
-        //{
-        //    Debug.Log("No Player");
-        //    return;
-        //}
-        //Action.DIR playerDir = getPlayer.GetComponent<Action>().GetCurDir();
-        //Vector3 playerPos = getPlayer.GetComponent<Transform>().position;
-        //if (playerDir == Action.DIR.LEFT)
-        //{
-        //    transform.eulerAngles = new Vector3(0, 180, 0);
-        //    playerPos.x -= modifyPosX;  
-        //    playerPos.y += modifyPosY;
-        //    gameObject.transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z);
-        //}
-        //else
-        //{
-        //    transform.eulerAngles = new Vector3(0, 0, 0);
-        //    playerPos.x += modifyPosX;
-        //    playerPos.y += modifyPosY;
-        //    gameObject.transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z);
-        //}
     }
 
     public void SetSkillPos()
@@ -359,18 +337,19 @@ public STATE getState()
         {
         // 플레이어에서 위치에 생성
 
+
             Action.DIR playerDir = getPlayer.GetComponent<Action>().GetCurDir();
             Vector3 playerPos = getPlayer.GetComponent<Transform>().position;
             if (playerDir == Action.DIR.LEFT)
             {
-                transform.eulerAngles = new Vector3(0, 180, 0);
+                GetComponent<SpriteRenderer>().flipX = true;
                 playerPos.x -= modifyPosX;
                 playerPos.y += modifyPosY;
                 gameObject.transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z);
             }
             else
             {
-                transform.eulerAngles = new Vector3(0, 0, 0);
+                GetComponent<SpriteRenderer>().flipX = false;
                 playerPos.x += modifyPosX;
                 playerPos.y += modifyPosY;
                 gameObject.transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z);

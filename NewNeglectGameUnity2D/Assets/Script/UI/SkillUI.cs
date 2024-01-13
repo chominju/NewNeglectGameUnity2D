@@ -40,34 +40,35 @@ public class SkillUI : MonoBehaviour
         if (instance == null)
             instance = this;
 
+        // 현재스킬버튼 null
         currentSkillButton = null;
+        // 스킬정보창 , 스킬프리셋창 안보이게 설정
         skillInfoUi.SetActive(false);   
         skillUi_skillPreset.SetActive(false);
 
         SetBackButtonSize(false);
-        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
         SetSkillUI();
     }
 
     void SetBackButtonSize(bool clickInfo)
     {
+        // 백버튼 크기조정
         float screenWidth = UIManager.GetUIManager().GetWidthSize();
         float screenHeight = UIManager.GetUIManager().GetHeightSize();
         Rect lSize = skillInfoUi.GetComponent<RectTransform>().rect;
         Rect rSize = playerSkillUi.GetComponent<RectTransform>().rect;
         float newWidthSize = 0;
-        //float newHeigthSize = 0;
+
+        // 세로 맞춤으로해서 가로만 맞추면됨.
         if (clickInfo)
         {
             // 장비/스킬를 클릭했을 때(3개의 오브젝트 보이기)
             newWidthSize = screenWidth - lSize.width - rSize.width;
-            //newHeigthSize = screenHeight - lSize.height - rSize.height;
         }
         else
         {
             // 장비/스킬을 클릭 안했을 때(2개의 오브젝트만 보이기)
             newWidthSize = screenWidth - rSize.width;
-            //newHeigthSize = screenHeight - rSize.height;
         }
 
         backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidthSize, backButton.GetComponent<RectTransform>().sizeDelta.y);
@@ -78,7 +79,6 @@ public class SkillUI : MonoBehaviour
         if (instance != null)
         {
             instance.DataUpdateAndTextUpdate();
-            //Debug.Log("UpdateEvnetTest SkillUI");
         }
     }
 
@@ -90,7 +90,6 @@ public class SkillUI : MonoBehaviour
             if (skillInfoUi.activeSelf)
             {
                 SkillInfoButton();
-               // SkillInfoText();
             }
         }
     }
@@ -102,25 +101,30 @@ public class SkillUI : MonoBehaviour
 
     void SetSkillUI()
     {
+        // 스킬데이터 가져오기
         var getData = DataManager.GetDataManager().GetSkillData();
 
+        // 플레이어 골드 text 설정
         playerGoldText.text = string.Format("{0:#,0}", DataManager.GetDataManager().GetPlayerData().currentGold);
-
-        for (int i = 0; i < skillObject.Length; i++)
+        int len = skillObject.Length;
+        for (int i = 0; i < len; i++)
         {
+            // 레벨, 슬라이더, 갯수 설정
             if (skillObject[i].name.Equals(getData[i].skillName))
             {
                 GameObject levelTextObj = skillObject[i].transform.Find("LevelText").gameObject;
                 GameObject sliderObj = skillObject[i].transform.Find("CountSlider").gameObject;
                 GameObject countlTextObj = sliderObj.transform.Find("CountText").gameObject;
 
-                if (getData[i].quantity <= 0 && !getData[i].isGainSkill)
+                // 획득기록이 없는 경우
+                if (/*getData[i].quantity <= 0 && */!getData[i].isGainSkill)
                 {
                     skillObject[i].GetComponent<Image>().color = Color.gray;
                     levelTextObj.SetActive(false);
                     sliderObj.SetActive(false);
                     countlTextObj.SetActive(false);
                 }
+                // 획득기록이 있는 경우
                 else
                 {
                     levelTextObj.SetActive(true);
@@ -142,12 +146,16 @@ public class SkillUI : MonoBehaviour
 
     public void SkillLevelUpButtonClick(Button levelUpButton)
     {
+        // 스킬 레벨업 버튼을 눌렀을 때
         int requiredGold = int.Parse(currentSkillDetailCsv[currentSkillData.skillLevel]["RequiredGold"].ToString());
+        // 현재 스킬레벨이 최대 레벨보다 높을 때
         if (currentSkillData.skillLevel >= currentSkillData.skillCurrentMaxLevel)
         {
             SoundManager.GetInstance().PlayFailSound();
             return;
         }
+
+        // 소지중인 골드가 필요한 골드보다 많을 때
         if (DataManager.GetDataManager().GetPlayerData().currentGold >= requiredGold)
         {
             SoundManager.GetInstance().PlayClickSound();
@@ -162,16 +170,9 @@ public class SkillUI : MonoBehaviour
         }
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void SkillTranscendenceButtonClick()
     {
-        //skillAwakenButton
+        // 보유량이 초월에 필요한 갯수보다 많을 때
         if(currentSkillData.quantity>= currentSkillData.mixCount)
         {
             SoundManager.GetInstance().PlayClickSound();
@@ -183,20 +184,19 @@ public class SkillUI : MonoBehaviour
         }
     }
 
-    void SkillInfoOn()
-    {
-        skillInfoUi.SetActive(true);
-    }
+    //void SkillInfoOn()
+    //{
+    //    skillInfoUi.SetActive(true);
+    //}
 
-    void SkillInfoOff()
-    {
-        skillInfoUi.SetActive(false);
-    }
+    //void SkillInfoOff()
+    //{
+    //    skillInfoUi.SetActive(false);
+    //}
 
     public void CloseSkillUI()
     {
         SetBackButtonSize(false);
-        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
         skillInfoUi.SetActive(false);
         skillUi_skillPreset.SetActive(false);
         this.gameObject.SetActive(false);
@@ -212,13 +212,12 @@ public class SkillUI : MonoBehaviour
         currentSkillDetailCsv = DataManager.GetDataManager().GetSkillDetailCsv(currentSkillButton.name);
 
         SkillInfoButton();
-        //SkillInfoText();
     }
 
     void SkillInfoButton()
     {
+        // 스킬 정보창 관련 
         SetBackButtonSize(true);
-        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(730, 1080);
         skillInfoUi.SetActive(true);
 
 
@@ -232,10 +231,8 @@ public class SkillUI : MonoBehaviour
 
 
 
-
-
-
-        if (currentSkillData.quantity <= 0 && currentSkillData.isGainSkill==false)
+        // 보유중인 스킬이 아닐 때
+        if (/*currentSkillData.quantity <= 0 && */!currentSkillData.isGainSkill/*==false*/)
         {
             skillLevelText.text = "";
             skillRequiredGoldText.text = "";
@@ -246,15 +243,19 @@ public class SkillUI : MonoBehaviour
         }
         else
         {
+            // 보유중인 스킬일 때
+            // 버튼들 활성화
             levelUpButton.SetActive(true);
             transcendenceButton.SetActive(true);
             skillEquipButton.SetActive(true);
             eqRequiredGoldImage.SetActive(true);
 
-            skillLevelText.text = "Lv. " + currentSkillData.skillLevel + " / " + currentSkillData.skillCurrentMaxLevel;
-            skillRequiredGoldText.text = string.Format("{0:#,0}", currentSkillDetailCsv[currentSkillData.skillLevel]["RequiredGold"]);
-
+            // 현재레벨, 필요한 골드량
+            
             int requiredGold = int.Parse(currentSkillDetailCsv[currentSkillData.skillLevel]["RequiredGold"].ToString());
+            skillLevelText.text = "Lv. " + currentSkillData.skillLevel + " / " + currentSkillData.skillCurrentMaxLevel;
+            skillRequiredGoldText.text = string.Format("{0:#,0}", requiredGold);
+
             if ((DataManager.GetDataManager().GetPlayerData().currentGold >= requiredGold) && (currentSkillData.skillLevel < currentSkillData.skillCurrentMaxLevel))
             {
                 levelUpButton.GetComponent<Image>().color = Color.yellow; // 버튼 활성화

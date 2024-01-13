@@ -93,7 +93,8 @@ public class EquipmentUI : MonoBehaviour
 
         playerGoldText.text = string.Format("{0:#,0}", DataManager.GetDataManager().GetPlayerData().currentGold);
 
-        for (int i = 0; i < equipmentObject.Length; i++)
+        int len = equipmentObject.Length;
+        for (int i = 0; i < len; i++)
         {
             if (equipmentObject[i].name.Equals(getData[i].itemName))
             {

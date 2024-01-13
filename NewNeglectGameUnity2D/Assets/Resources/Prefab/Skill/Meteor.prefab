@@ -170,7 +170,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 128
-  meteorRange: {x: 10, y: 7}
+  meteorRange: {x: 20, y: 10}
   meteorPrefab: {fileID: 3376164925244337846}
 --- !u!60 &8233780980277801516
 PolygonCollider2D:

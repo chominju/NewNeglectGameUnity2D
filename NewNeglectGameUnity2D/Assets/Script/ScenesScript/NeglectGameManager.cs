@@ -24,6 +24,8 @@ public class NeglectGameManager : MonoBehaviour
 
     private bool isAlreadyLoginToday;
 
+    float saveTimer = 10.0f;
+
     //private const string loginLogPath = @"Assets\TextFile\LoginLog.txt";
     void Start()
     {
@@ -54,7 +56,9 @@ public class NeglectGameManager : MonoBehaviour
 
         AddComponentEnemyManager();
 
-        Invoke("CreatePlayerCanvas", 0.0001f); 
+        Invoke("CreatePlayerCanvas", 0.0001f);
+
+        StartCoroutine(AutoSaveCoroutine());
     }
 
     private void Update()
@@ -65,7 +69,22 @@ public class NeglectGameManager : MonoBehaviour
             loginRewardDate = currentDay;
             DataManager.GetDataManager().SetAchievementDataIsReceiveReward("Login", false);
         }
+
+
     }
+
+    private IEnumerator AutoSaveCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(saveTimer); // 10초 동안 대기
+
+            // 10초가 경과하면 이 부분에서 저장할 동작을 수행
+            DataManager.GetDataManager().SaveAllData();
+            Debug.Log("Auto Save All Data");
+        }
+    }
+
 
     public DateTime GetLoginTime()
     {

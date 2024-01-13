@@ -39,7 +39,7 @@ public class MeteorSkill : MonoBehaviour
             {
                 num++;
                 Debug.Log("Meteor Random EnemyName : " + colliders[randomEnemyIndex].gameObject.name);
-                gameObject.transform.position = new Vector3(colliders[randomEnemyIndex].transform.position.x, colliders[randomEnemyIndex].transform.position.y, 0);
+                gameObject.transform.position = new Vector3(colliders[randomEnemyIndex].transform.position.x, colliders[randomEnemyIndex].transform.position.y+1.5f, 0);
                 enemyName.Add(colliders[randomEnemyIndex].gameObject.name);
 
                 if (num >= 3)

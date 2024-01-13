@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class FireBallSkill : MonoBehaviour
 {
-    float moveSpeed;
+    public float moveSpeed;
     public GameObject target;                                            // 타켓
     public Coroutine moveCoroutine;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +29,7 @@ public class FireBallSkill : MonoBehaviour
     {
         while (true)
         {
-
+            Debug.Log("FireBall Target : "+target);
             if (target != null)
             {
                 if (!target.activeSelf)
@@ -104,34 +104,35 @@ public class FireBallSkill : MonoBehaviour
         Vector3 TornadoPos = this.GetComponent<Transform>().position;
         Vector3 TargetPos = target.GetComponent<Transform>().position;
 
-        float dist = (TornadoPos - TargetPos).sqrMagnitude; // 거리의 크기를 구함
+        float dist = Vector3.Distance(TargetPos,TornadoPos); // 거리의 크기를 구함
 
 
         Vector3 direction = TargetPos - TornadoPos;
-        direction.Normalize(); // 방향 벡터를 정규화하여 길이를 1로 만듦
 
         while (true)
         {
             if (dist > float.Epsilon)
             {
-
+                // 왼쪽
                 if (direction.x < 0)
                     GetComponent<SpriteRenderer>().flipX = true;
+                // 오른쪽
                 else
                     GetComponent<SpriteRenderer>().flipX = false;
-                moveSpeed = 0.5f;
                 //Debug.Log("이동 중");
                 // 이동중
                 GetComponent<Skill>().SetState(Skill.STATE.MOVE);
 
-                transform.Translate(direction * moveSpeed * Time.deltaTime);
+                moveSpeed = 0.5f;
+                //transform.Translate(direction * moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, TargetPos, Time.deltaTime * moveSpeed);// Translate(direction * moveSpeed * Time.deltaTime);
 
                 //Vector3 newPosition = Vector3.MoveTowards(gameObject.transform.position, TargetPos, moveSpeed * Time.deltaTime);   // MoveTowards 리지드바디 2D의 움직임을 계산.
 
                 //rb2D.MovePosition(newPosition);
             }
-            else
-                moveSpeed = 0.0f;
+            //else
+            //    moveSpeed = 0.0f;
             yield return new WaitForFixedUpdate();
         }
 
