@@ -42,27 +42,14 @@ public class TornadoSkill : MonoBehaviour
             if (!EnemyManager.IsExistEnemy())                              // 몬스터가 없다면
             {
                 GetComponent<Skill>().SetState(Skill.STATE.IDLE);
-                //curState = STATE.IDLE;
                 moveSpeed = 0.0f;
-                //curState = STATE.IDLE;
-                //Debug.Log("몬스터가 없다:");
-                Debug.Log("Tornado Skill // No Enemy");
             }
             else
             {
-                //if (target == null || target.activeSelf == false)
-                //{
-                    //Debug.Log("타켓설정 중");
-                    //if (curCoroutine != null)
-                    //    StopCoroutine(curCoroutine);
                     if (GetComponent<Skill>().getState() == Skill.STATE.IDLE)
                     {
-                        Debug.Log("Tornado Skill // SET TARGET");
-
                         SetTarget();
                     }
-
-                //}
 
                 if (moveCoroutine != null)
                 {
@@ -72,16 +59,10 @@ public class TornadoSkill : MonoBehaviour
 
                 if (GetComponent<Skill>().getState() != Skill.STATE.ATTACK)
                 {
-                    Debug.Log("Tornado Skill // MOVE");
-
                     moveCoroutine = StartCoroutine(TornadoMove());                             // 이동
                 }
-                                                                                        //{
-                                                                                        //    curState = STATE.ATTACK;
-                                                                                        //    curCoroutine = StartCoroutine(AttackToMonster());
-                                                                                        //}
             }
-            yield return new WaitForFixedUpdate();// WaitForSeconds(Update);
+            yield return new WaitForFixedUpdate();
         }
     }
 

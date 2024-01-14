@@ -42,7 +42,6 @@ public class EquipmentUI : MonoBehaviour
         currentEquipmentButton = null;
         eqInfoUi.SetActive(false);
         SetBackButtonSize(false);
-        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
         SetEquipmentUI();
         isMixAble = false;
     }
@@ -54,18 +53,15 @@ public class EquipmentUI : MonoBehaviour
         Rect lSize = eqInfoUi.GetComponent<RectTransform>().rect;
         Rect rSize = PlayerEquipmentUi.GetComponent<RectTransform>().rect;
         float newWidthSize = 0;
-        //float newHeigthSize = 0;
         if (clickInfo)
         {
             // 장비/스킬를 클릭했을 때(3개의 오브젝트 보이기)
             newWidthSize = screenWidth - lSize.width - rSize.width;
-            //newHeigthSize = screenHeight - lSize.height - rSize.height;
         }
         else
         {
             // 장비/스킬을 클릭 안했을 때(2개의 오브젝트만 보이기)
             newWidthSize = screenWidth - rSize.width;
-            //newHeigthSize = screenHeight - rSize.height;
         }
 
         backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidthSize, backButton.GetComponent<RectTransform>().sizeDelta.y);
@@ -83,7 +79,6 @@ public class EquipmentUI : MonoBehaviour
         if (instance != null)
         {
             instance.DataUpdateAndTextUpdate();
-            Debug.Log("EquipmentUI UpdateEventTest");
         }
     }
 
@@ -169,28 +164,9 @@ public class EquipmentUI : MonoBehaviour
         }
         equipButton.GetComponent<Image>().color = Color.gray;
     }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void EquipmentInfoOn()
-    {
-        eqInfoUi.SetActive(true);
-    }
-
-    void EquipmentInfoOff()
-    {
-        eqInfoUi.SetActive(false);
-    }
-
     public void CloseEquipmentUI()
     {
         SetBackButtonSize(false);
-        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1080);
         if (eqInfoUi != null)
             eqInfoUi.SetActive(false);
         if (currentEquipmentMixButton != null)
@@ -218,25 +194,6 @@ public class EquipmentUI : MonoBehaviour
 
     public bool IsEquipmentMixAble()
     {
-        //var getData = DataManager.GetDataManager().GetEquipmentData();
-
-        //foreach (var clickEquipmentData in getData)
-        //{
-        //    if (currentEquipmentButton.name.Equals(clickEquipmentData.itemName))
-        //    {
-        //        if (clickEquipmentData.quantity >= clickEquipmentData.mixCount)
-        //        {
-        //            currentEquipmentMixButton.GetComponent<Image>().color = new Color(255, 219, 0, 255);
-        //            return true;
-        //        }
-        //        else
-        //        {
-        //            currentEquipmentMixButton.GetComponent<Image>().color = new Color(0, 0, 0, 150);
-        //            return false;
-        //        }
-        //    }
-        //}
-        //return false;
         if (currentEquipmentData.quantity >= currentEquipmentData.mixCount)
         {
             currentEquipmentMixButton.GetComponent<Image>().color = Color.yellow;
@@ -287,7 +244,6 @@ public class EquipmentUI : MonoBehaviour
     void EquipmentInfoText()
     {
         SetBackButtonSize(true);
-        //backButton.GetComponent<RectTransform>().sizeDelta = new Vector2(730, 1080);
         eqInfoUi.SetActive(true);
         if (currentEquipmentData.quantity <= 0 && currentEquipmentData.isGainItem == false)
         {
@@ -325,8 +281,6 @@ public class EquipmentUI : MonoBehaviour
             else
                 levelUpButton.GetComponent<Image>().color = Color.gray;
         }
-        //eqInfoText;
-
 
         eqInfoText.text = "보유 효과\n공격력\t\t" + currentEquipmentDetailCsv[currentEquipmentData.itemLevel]["HaveAtk"] + " -> " + currentEquipmentDetailCsv[currentEquipmentData.itemLevel + 1]["HaveAtk"] +
             "\n\n장착 효과\n공격력\t\t" + currentEquipmentDetailCsv[currentEquipmentData.itemLevel]["EquipAtk"] + " -> " + currentEquipmentDetailCsv[currentEquipmentData.itemLevel]["EquipAtk"];

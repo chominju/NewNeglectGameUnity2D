@@ -26,7 +26,6 @@ public class NeglectGameManager : MonoBehaviour
 
     float saveTimer = 10.0f;
 
-    //private const string loginLogPath = @"Assets\TextFile\LoginLog.txt";
     void Start()
     {
         if (instance == null)
@@ -40,8 +39,6 @@ public class NeglectGameManager : MonoBehaviour
         }
 
         CreatePlayer();
-
-
 
 
         offlineRewards = new int[4];
@@ -135,7 +132,6 @@ public class NeglectGameManager : MonoBehaviour
             SaveLoginOutLog("Logout");
             DataManager.GetDataManager().SaveAllData();
         }
-        //DataManager.GetDataManager().RemoveAllData();
     }
 
 
@@ -169,9 +165,6 @@ public class NeglectGameManager : MonoBehaviour
             offlineRewards[1] = 1440;               // 골드
             offlineRewards[2] = 1440;               // 경험치
             offlineRewards[3] = 1440;               // 오프라인 시간
-
-
-
         }
         else
         {
@@ -197,12 +190,6 @@ public class NeglectGameManager : MonoBehaviour
             DataManager.GetDataManager().SetAchievementDataIsSuccess("Login", true);
             DataManager.GetDataManager().SetAchievementDataIsReceiveReward("Login", false);
         }
-        //else
-        //{
-        //    // 이미 오늘 접속함
-        //    DataManager.GetDataManager().SetAchievementDataIsSuccess("Login", true);
-        //    DataManager.GetDataManager().SetAchievementDataIsReceiveReward("Login", true);
-        //}
         loginRewardDate = loginTime;
     }
 
@@ -223,7 +210,6 @@ public class NeglectGameManager : MonoBehaviour
     public int OfflineTime()
     {
         int offlineTime = -1;
-        //string[] lastLoginLog = DataManager.GetDataManager().LoadlastLoginLog();
         DateTimeData getLast = DataManager.GetDataManager().LoadLastLogoutData();
 
         if (getLast.year == 0)

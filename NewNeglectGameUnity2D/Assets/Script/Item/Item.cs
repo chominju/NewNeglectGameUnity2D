@@ -11,6 +11,7 @@ public class Item : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // ÇÃ·¹ÀÌ¾î¿Í Ãæµ¹½Ã È¹µæ
         if (collision.gameObject.CompareTag("Player"))
         {
             DataManager.GetDataManager().GainEquipment(gameObject.name);

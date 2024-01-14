@@ -8,14 +8,12 @@ public class FireBallSkill : MonoBehaviour
     public GameObject target;                                            // 타켓
     public Coroutine moveCoroutine;
     
-    // Start is called before the first frame update
     void Start()
     {
         moveSpeed = 0.5f;
         StartCoroutine(FireBallAction());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (GetComponent<Skill>().getState() == Skill.STATE.ATTACK)
@@ -42,22 +40,14 @@ public class FireBallSkill : MonoBehaviour
             if (!EnemyManager.IsExistEnemy())                              // 몬스터가 없다면
             {
                 GetComponent<Skill>().SetState(Skill.STATE.IDLE);
-                //curState = STATE.IDLE;
                 moveSpeed = 0.0f;
-                //curState = STATE.IDLE;
-                //Debug.Log("몬스터가 없다:");
-                Debug.Log("Tornado Skill // No Enemy");
             }
             else
             {
                 if (GetComponent<Skill>().getState() == Skill.STATE.IDLE)
                 {
-                    Debug.Log("Tornado Skill // SET TARGET");
-
                     SetTarget();
                 }
-
-                //}
 
                 if (moveCoroutine != null)
                 {
@@ -67,12 +57,10 @@ public class FireBallSkill : MonoBehaviour
 
                 if (GetComponent<Skill>().getState() != Skill.STATE.ATTACK)
                 {
-                    Debug.Log("Tornado Skill // MOVE");
-
                     moveCoroutine = StartCoroutine(FireBallMove());                             // 이동
                 }
             }
-            yield return new WaitForFixedUpdate();// WaitForSeconds(Update);
+            yield return new WaitForFixedUpdate();
         }
     }
 
@@ -119,25 +107,15 @@ public class FireBallSkill : MonoBehaviour
                 // 오른쪽
                 else
                     GetComponent<SpriteRenderer>().flipX = false;
-                //Debug.Log("이동 중");
                 // 이동중
                 GetComponent<Skill>().SetState(Skill.STATE.MOVE);
 
                 moveSpeed = 0.5f;
-                //transform.Translate(direction * moveSpeed * Time.deltaTime);
-                transform.position = Vector3.MoveTowards(transform.position, TargetPos, Time.deltaTime * moveSpeed);// Translate(direction * moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, TargetPos, Time.deltaTime * moveSpeed);
 
-                //Vector3 newPosition = Vector3.MoveTowards(gameObject.transform.position, TargetPos, moveSpeed * Time.deltaTime);   // MoveTowards 리지드바디 2D의 움직임을 계산.
-
-                //rb2D.MovePosition(newPosition);
             }
-            //else
-            //    moveSpeed = 0.0f;
             yield return new WaitForFixedUpdate();
         }
 
-        //else
-        //Debug.Log("이동완료");
-        // 이동완료
     }
 }

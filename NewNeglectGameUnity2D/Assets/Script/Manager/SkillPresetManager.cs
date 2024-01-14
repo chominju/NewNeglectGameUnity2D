@@ -15,7 +15,6 @@ public class SkillPresetManager : MonoBehaviour
     float[] skillCoolTimePreset;                                // 스킬 쿨타임 
     float[] skillCurrentCoolTimePreset;                         // 스킬 쿨타임 남은시간
     bool[] isSkillUsePreset;                                    // 스킬 사용 여부
-    int skillAmount;                                            // 스킬의 전체 갯수
 
     private SkillData[] getSkillDataAsset;                      // 스킬 데이터 가져오기
 
@@ -37,7 +36,6 @@ public class SkillPresetManager : MonoBehaviour
         isAuto = false;
         getSkillDataAsset = DataManager.GetDataManager().GetSkillData();
         autoCoroutine = null;
-          skillAmount = 9;// DataManager.GetSkillDataAssetAmount();
         UpdateSkillPreset();
 
     }
@@ -61,14 +59,14 @@ public class SkillPresetManager : MonoBehaviour
         if (isAuto == true)         //   오토중이면 오토해제
         {
             isAuto = false;
-            autoButton.GetComponent<Image>().color = Color.gray;//new Color(50, 50, 50, 150); // 오토 x
+            autoButton.GetComponent<Image>().color = Color.gray;  // 오토 x
             if (autoCoroutine != null)
                 StopCoroutine(autoCoroutine);
         }
         else
         {
             // 오토중이 아니면 오토설정
-            autoButton.GetComponent<Image>().color = Color.yellow;// new Color(255, 215, 0, 255); // 오토 o
+            autoButton.GetComponent<Image>().color = Color.yellow;  // 오토 o
             isAuto = true;
            
             if (autoCoroutine != null)
@@ -82,28 +80,23 @@ public class SkillPresetManager : MonoBehaviour
         if (instance != null)
         {
             instance.UpdateSkillPreset();
-            //Debug.Log("SkillPresetUIUpdateEvent");
         }
     }
 
     void UpdateSkillPreset()
     {
+        // 스킬 프리셋 업데이트
         var getSkillPreset = DataManager.GetDataManager().GetSkillPreset();
 
         for (int i = 0; i < 6; i++)
         {
+            // 비여있다면 다음칸으로 
             if (getSkillPreset[i] == null)
                 continue;
             else
             {
                 int buttonNum = i + 1;
-                //skillNamePreset[i] = getSkillPreset[i]''
-                //skillPrefabPreset[i] = Resources.Load<GameObject>("Prefab/Skill/Prefab/" + getSkillPreset[i]);
                 SetSkillPreset(getSkillPreset[i], i);
-                //GameObject presetButton = gameObject.transform.Find("SkillButton" + buttonNum).gameObject;
-                //if (presetButton == null)
-                //    Debug.Log("Preset Load Error");
-                //presetButton.transform.Find("SkillImage" + buttonNum).GetComponent<Image>().sprite = Resources.Load<Sprite>("Skill/Icon/" + "Icon_" + getSkillPreset[i]);
             }   
         }   
     }
@@ -111,35 +104,36 @@ public class SkillPresetManager : MonoBehaviour
     public void SetSkillPreset(string skillName , int num)
     {
         int buttonNum = num + 1;
+        // 이미 세팅완료
         if (skillNamePreset[num] == skillName)
             return;
         skillNamePreset[num] = skillName;
         skillPrefabPreset[num] = Resources.Load<GameObject>("Prefab/Skill/" + skillName);
-        for (int i = 0; i < skillAmount /*skillAmount*/; i++)
-        {
-            if (getSkillDataAsset[i].skillName == skillName)
-            {
-                skillCoolTimePreset[num] = getSkillDataAsset[i].skillCoolTime;
-                skillCurrentCoolTimePreset[num] = skillCoolTimePreset[num];
-                isSkillUsePreset[num] = false;
-                break;
-            }
 
-        }
+
+        var getSkillData = DataManager.GetDataManager().GetFindSkillData(skillName);
+        skillCoolTimePreset[num] = getSkillData.skillCoolTime;
+        skillCurrentCoolTimePreset[num] = skillCoolTimePreset[num];
+        isSkillUsePreset[num] = false;
+
+
             GameObject presetButton = gameObject.transform.Find("SkillButton" + buttonNum).gameObject;
             skillPresetButtonImageBackGround[num] = presetButton;
+
             if (presetButton == null)
                 Debug.Log("Preset Load Error");
+
             skillPresetButtonImage[num] = presetButton.transform.Find("SkillImage" + buttonNum).gameObject;
             skillPresetButtonCoolTimeText[num] = presetButton.transform.Find("SkillCoolTime" + buttonNum).gameObject;
             presetButton.transform.Find("SkillImage" + buttonNum).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/Skill/Icon/" + "Icon_" + skillName);
             skillPresetButtonImageBackGround[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/Skill/Icon/" + "Icon_" + skillName);
-            skillPresetButtonImageBackGround[num].GetComponent<Image>().color = Color.gray; //new Color(0.2f, 0.2f, 0.2f);
+            skillPresetButtonImageBackGround[num].GetComponent<Image>().color = Color.gray;
     }
 
 
-    public void SkillClick(Button skillButton)                                         // 스킬을 수동으로 사용할 때
+    public void SkillClick(Button skillButton)                                      
     {
+        // 스킬을 수동으로 사용할 때
         GameObject tempSkill = null;
         int presetNum = 0;
         if (skillButton.name == "SkillButton1")
@@ -174,6 +168,7 @@ public class SkillPresetManager : MonoBehaviour
         }
         else
         {
+            // 프리셋 번호 에러
             SoundManager.GetInstance().PlayFailSound();
             Debug.Log("PRESET NUM ERROR");
         }
@@ -181,11 +176,13 @@ public class SkillPresetManager : MonoBehaviour
         {
             if (isSkillUsePreset[presetNum] == false)
             {
+                // 스킬 사용을 하지않았다면
                 SoundManager.GetInstance().PlayClickSound();
                 SkillUse(presetNum);
             }
             else
             {
+                // 스킬을 이미 사용함
                 SoundManager.GetInstance().PlayFailSound();
                 Debug.Log("Skill Already Use");
             }
@@ -193,8 +190,7 @@ public class SkillPresetManager : MonoBehaviour
     }
     IEnumerator AutoSkill()
     {
-        //if (isAuto)
-        //{
+        // 스킬 오토를 킴
         while (true)
         {
             for (int i = 0; i < 6; i++)
@@ -208,56 +204,37 @@ public class SkillPresetManager : MonoBehaviour
                         SkillUse(i);
                     }
                 }
-                //    if (skillPrefabPreset[i].GetComponent<Skill>().IsSkillUse() == false)
-                //{
-                //    skillPrefabPreset[i].GetComponent<Skill>().SkillUse();
-                //    GameObject.Instantiate(skillPrefabPreset[i]);
-                //}
             }
 
             yield return new WaitForSeconds(0.5f);
         }
-        //foreach (var skill in skillPrefabPreset)
-        //{
-        //    if (skill == null)                      // 스킬이 등록되어 있지않으면
-        //        continue;
-        //    else
-        //    {
-        //        // 스킬이 있을 때(사용하지않았을 떄)
-        //        if (skill.GetComponent<Skill>().IsSkillUse() == false)
-        //        {
-        //            skill.GetComponent<Skill>().SkillUse();
-        //            GameObject.Instantiate(skill);
-        //        }
-        //    }
-        //}
-        //}
     }
 
     void SkillUse(int presetNum)
     {
+        // 스킬 사용 true , 스킬 생성
         isSkillUsePreset[presetNum] = true;
-        /*skillObject[presetNum] = */ GameObject.Instantiate(skillPrefabPreset[presetNum]);
+        GameObject.Instantiate(skillPrefabPreset[presetNum]);
     }
 
     private void Update()
     {
+        // 쿨타임 업데이트
         for(int presetNum = 0; presetNum < 6; presetNum++)
         {
             if(isSkillUsePreset[presetNum])
             {
-
-                //Debug.Log(skillNamePreset[presetNum] + "Time : " + skillCurrentCoolTimePreset[presetNum]);
                 skillCurrentCoolTimePreset[presetNum] -= Time.deltaTime;
 
+                // 남은쿨타임 시간 text 업데이트
                 skillPresetButtonCoolTimeText[presetNum].GetComponent<Text>().text = ((int)skillCurrentCoolTimePreset[presetNum]).ToString();
 
+                // 그림으로 표시
                 float fillAmount = 1.0f -  skillCurrentCoolTimePreset[presetNum] / skillCoolTimePreset[presetNum];
                 skillPresetButtonImage[presetNum].GetComponent<Image>().fillAmount = fillAmount;
 
                 if (skillCurrentCoolTimePreset[presetNum]<=0.0f)
                 {
-                    //Debug.Log(skillNamePreset[presetNum] + "Time : " + skillCurrentCoolTimePreset[presetNum]+"      END");
                     isSkillUsePreset[presetNum] = false;
                     skillCurrentCoolTimePreset[presetNum] = skillCoolTimePreset[presetNum];
                     skillPresetButtonCoolTimeText[presetNum].GetComponent<Text>().text = "";
@@ -267,9 +244,4 @@ public class SkillPresetManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
 }

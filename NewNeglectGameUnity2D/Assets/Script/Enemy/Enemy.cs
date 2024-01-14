@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 delegate void UpdateDataEnemy(string name);
-public class Enemy : Character
+public class Enemy : MonoBehaviour
 {
     public string enemyName;                    // 적이름
     EnemyData enemyData;                        // DataManager에서 가져오는 enemyData
@@ -20,7 +20,7 @@ public class Enemy : Character
     int maxHp;                                  // 적 최대체력
     int exp;                                    // 적이 주는 경험치
     float respawnTime;                          // 적이 죽었을 떄 리스폰 시간
-
+    bool isDead;                                // 적이 죽었는지
     public GameObject dropItem;                 // 적이 드랍하는 아이템
     public int dropGold;                        // 적이 드랍하는 골드량
 
@@ -79,15 +79,13 @@ public class Enemy : Character
         gameObject.AddComponent<EnemyAction>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // 피가 0 or 이미 죽은상태
         if(hp<=0 || isDead)
         {
             isDead = false;
             hp = maxHp;
-            hpBar.SetActive(false);
-            gameObject.SetActive(false);
             enemyDeadEvent(gameObject.name);
             DataManager.GetDataManager().GainExp(exp);
             GameObject itemTemp = Instantiate(dropItem);
@@ -99,6 +97,8 @@ public class Enemy : Character
 
             // 업적 +1
             DataManager.GetDataManager().UpdateAchievementData("EnemyKill", false ,0);
+            hpBar.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         // hpBar는 계속 적 위치에 따라 이동해야됨

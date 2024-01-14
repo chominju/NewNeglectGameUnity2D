@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class PlayerAction : Action
 {
-
-    private GameObject childColiObject;                                         // 플레이어 콜라이더(몬스터)
-    private GameObject weaponColl;                                              // 플레이어 공격시 콜라이더
-
     private float playerAtkSpeed;
-    private Player playerComponent;
 
     // Start is called before the first frame update
     void Start()
@@ -19,14 +14,11 @@ public class PlayerAction : Action
         animator = GetComponent<Animator>();
         rb2D = GetComponent<Rigidbody2D>();
         coli2D = GetComponent<Collider2D>();
-        childColiObject = transform.Find("PlayerCollider").gameObject;
-        weaponColl = transform.Find("PlayerWeaponCollider").gameObject;
         preDir = DIR.LEFT;
         curDir = preDir;
         curState = STATE.IDLE;
 
         playerAtkSpeed = animator.speed / (2.0f * animator.speed);
-        playerComponent = GetComponent<Player>();
 
         if (EnemyManager.GetEnemyManager() != null)
         {
@@ -45,17 +37,6 @@ public class PlayerAction : Action
     public float GetAtkSpeed()
     {
         return playerAtkSpeed;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    private void FixedUpdate()
-    {
-        //Action();
     }
 
     public override IEnumerator CharacterAction()
@@ -81,12 +62,9 @@ public class PlayerAction : Action
 
                 if (curState != STATE.ATTACK)
                     moveCoroutine = StartCoroutine(Move());                             // 이동
-                                                                                        //{
-                                                                                        //    curState = STATE.ATTACK;
-                                                                                        //    curCoroutine = StartCoroutine(AttackToMonster());
-                                                                                        //}
+                                                                                       
             }
-            yield return new WaitForFixedUpdate();// WaitForSeconds(Update);
+            yield return new WaitForFixedUpdate();
         }
     }
 
@@ -105,7 +83,7 @@ public class PlayerAction : Action
             if (enemyObject.Value.activeSelf && enemyObject.Value.GetComponent<Enemy>().GetHp() > 0)
             {
                 Vector3 enemyPos = enemyObject.Value.GetComponent<Transform>().position;
-                float newDistance = (transform.position - enemyPos).sqrMagnitude;
+                float newDistance = Vector3.Distance(transform.position,enemyPos);
                 if (newDistance.CompareTo(distance) < 0)
                 {
                     distance = newDistance;
@@ -125,16 +103,19 @@ public class PlayerAction : Action
         Vector3 playerPos = this.GetComponent<Transform>().position;
         Vector3 TargetPos = target.GetComponent<Transform>().position;
 
-        float dist = (playerPos - TargetPos).sqrMagnitude; // 거리의 크기를 구함
+        float dist = Vector3.Distance(playerPos , TargetPos); // 거리의 크기를 구함
+        Vector3 direction = TargetPos - playerPos;
 
-        if (playerPos.x >= TargetPos.x)
+        // 왼쪽
+        if (direction.x < 0)
             curDir = DIR.LEFT;
         else
             curDir = DIR.RIGHT;
 
-
+        // 이전방향이랑 달라졌을 때,
         if (preDir != curDir)
         {
+            // 왼쪽 방향
             if (curDir == DIR.LEFT)
             {
                 transform.eulerAngles = new Vector3(0, 0, 0);
@@ -145,7 +126,7 @@ public class PlayerAction : Action
             }
             else
             {
-
+                // 오른쪽 방향
                 transform.eulerAngles = new Vector3(0, 180, 0);
 
                 Vector3 tempPos = transform.localPosition;
@@ -160,34 +141,18 @@ public class PlayerAction : Action
         {
             if (dist > float.Epsilon)
             {
+                // 남은거리가 0(미세한)보다 클 때
                 curState = STATE.WALK;
                 Vector3 newPosition = Vector3.MoveTowards(rb2D.position, TargetPos, moveSpeed * Time.deltaTime);   // MoveTowards 리지드바디 2D의 움직임을 계산.
 
                 rb2D.MovePosition(newPosition);
             }
 
+            // 타켓이 죽으면 그냥 서있기.
             if (target.activeSelf == false)
                 curState = STATE.IDLE;
             yield return new WaitForFixedUpdate();
         }
     }
 
-    public override IEnumerator AttackToTarget()
-    {
-        curState = STATE.ATTACK;
-        if (animator.GetBool("isAttack"))
-        {
-            StartCoroutine(target.GetComponent<EnemyAction>().CharacterDamage(atk, animator.speed));
-            yield return new WaitForSeconds(animator.speed);
-            AttackOff();
-        }
-
-
-    }
-
-    public override IEnumerator CharacterDamage(int damage, float interval)
-    {
-        Debug.Log("CharacterDamage");
-        yield return new WaitForSeconds(interval);
-    }
 }

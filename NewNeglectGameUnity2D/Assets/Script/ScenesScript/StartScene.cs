@@ -17,7 +17,6 @@ public class StartScene : MonoBehaviour
 
     public void StartButton()
     {
-       // DataManager.GetDataManager().RemoveAllData();
         SoundManager.GetInstance().PlayMenuClickSound();
 
         if (DataManager.GetDataManager().LoadPlayerData()) // 참이면 존재함
@@ -53,24 +52,18 @@ public class StartScene : MonoBehaviour
     public void CreatePlayerData()
     {
         DataManager.GetDataManager().CreatePlayerData(playerNameInput.text);
-        //PlayerData playerData = ScriptableObject.CreateInstance<PlayerData>();
-        //playerData.playerName = playerNameInput.text;
-
-        //AssetDatabase.CreateAsset(playerData, playerDataSavePath);
     }
 
 
     IEnumerator LoadMyAsyncScene()
     {
-        // AsyncOperation을 통해 Scene Load 정도를 알 수 있다.
+        // AsyncOperation을 통해 Scene Load 정도를 알 수 있다. 다 되면 다음씬으로 자동으로 넘어감.
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(nextSceneName);
 
         // Scene을 불러오는 것이 완료되면, AsyncOperation은 isDone 상태가 된다.
         while (!asyncLoad.isDone)
         {
-
             DontDestroyOnLoad(dataManager);
-            //testText.text = "로딩완료...";
             yield return null;
         }
     }

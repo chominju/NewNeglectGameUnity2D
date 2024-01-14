@@ -8,9 +8,9 @@ public class PlayerCollider : MonoBehaviour
     private BoxCollider2D boxCollider;
     Vector2 boxColliderSize;
 
-    private float timer;
-    private float damageInterval;
-    // Start is called before the first frame update
+    private float timer;                                    // 타이머
+    private float damageInterval;                           // 데미지 들어오는 시간
+
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
@@ -18,22 +18,22 @@ public class PlayerCollider : MonoBehaviour
         if (boxCollider)
             boxColliderSize = boxCollider.size;
 
-        damageInterval = 0.5f;
+        damageInterval = 1.0f;
         timer = damageInterval + 0.1f;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // 플레이어랑 적이 겹치는지 계속 보기
         Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, boxColliderSize, 0.0f);
         timer += Time.deltaTime;
 
+        // 데미지 들어오는 시간보다 시간이 많으면
         if (timer >= damageInterval)
         {
             foreach (Collider2D collider in colliders)
             if (collider.CompareTag("Enemy"))
             {
-                    //player.GetComponent<Sprite    Renderer>().color = Color.red;
                     int enemyAtk = collider.gameObject.GetComponent<Enemy>().GetAtk();
                     int playerDef = player.GetComponent<Player>().GetPlayerInfo().def;
                     int damage = enemyAtk - playerDef;
@@ -44,8 +44,5 @@ public class PlayerCollider : MonoBehaviour
                 }
             timer = 0.0f;   
         }
-
-        //if(isColliderEnemyExist==false)
-        //    player.GetComponent<SpriteRenderer>().color = Color.white;
     }
 }

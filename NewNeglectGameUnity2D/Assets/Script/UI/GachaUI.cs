@@ -33,7 +33,6 @@ public class GachaUI : MonoBehaviour
     public Text playerGoldText;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         if (instance == null)
@@ -52,12 +51,6 @@ public class GachaUI : MonoBehaviour
 
         isEquipmentGacha = false;
         isSkillGacha = false;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public static void GachaUIUpdateEvent()
@@ -170,8 +163,6 @@ public class GachaUI : MonoBehaviour
 
                 GachaFreeUI[i].GetComponent<Image>().sprite = getEquipmentData[num].sprite;
                 equipmentGachaQuantity[num]++;
-                // getEquipmentData[num].sprite = Resources.Load()
-
             }
 
             for (int i = 0; i < getEquipmentDataSize; i++)

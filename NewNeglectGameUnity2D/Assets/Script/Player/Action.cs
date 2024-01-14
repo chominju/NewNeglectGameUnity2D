@@ -25,10 +25,10 @@ abstract public class Action : MonoBehaviour
     public Collider2D coli2D;                                            // 콜라이더
     public GameObject target;                                            // 타켓
     public Coroutine curCoroutine;                                       // 현재 코루틴
-    public Coroutine moveCoroutine;
-    public DIR preDir;
-    public DIR curDir;
-    public STATE curState;
+    public Coroutine moveCoroutine;                                      // 움직임 코루틴
+    public DIR preDir;                                                   // 이전 방향
+    public DIR curDir;                                                   // 현재 방향
+    public STATE curState;                                               // 현재 상태
 
     public void StopMoveCoroutine()
     {
@@ -56,7 +56,6 @@ abstract public class Action : MonoBehaviour
             case STATE.ATTACK:
                 {
                     Attack();
-                    //curCoroutine = StartCoroutine(AttackToMonster());
                     break;
                 }
         }
@@ -67,18 +66,6 @@ abstract public class Action : MonoBehaviour
     public abstract void SetTarget();
 
     public abstract IEnumerator Move();
-
-    public abstract IEnumerator AttackToTarget();
-
-    public abstract IEnumerator CharacterDamage(int damage, float interval);
-
-    public virtual IEnumerator ChanageColorCharacter(float interval)
-    {
-        GetComponent<SpriteRenderer>().color = Color.red;
-        yield return new WaitForSeconds(interval / 2.0f);
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
-
 
     public void Idle()
     {
@@ -103,7 +90,6 @@ abstract public class Action : MonoBehaviour
     {
         animator.speed = 0.333f;
         atkSpeed = animator.speed / (2.0f * animator.speed);
-        //target = null;
         curState = STATE.ATTACK;
         animator.SetBool("isWalk", false);
         animator.SetBool("isAttack", true);

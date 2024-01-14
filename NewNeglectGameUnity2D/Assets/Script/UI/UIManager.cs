@@ -77,7 +77,6 @@ public class UIManager : MonoBehaviour
         return heightSize;
     }
 
-    // Update is called once per frame
     void ShowNeglectRewardPanel()
     {
         if (NeglectGameManager.GetNeglectGameManager().GetIsExistOfflineRewards() == false)
@@ -144,7 +143,6 @@ public class UIManager : MonoBehaviour
         if (instance != null)
         {
             instance.DataUpdateAndTextUpdate();
-            //Debug.Log("UpdateEvnetTest UIManager");
         }
     }
 

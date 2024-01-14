@@ -7,7 +7,7 @@ using System.IO;
 
 
 //EditorApplication
-public class Player : Character
+public class Player : MonoBehaviour
 {
     private static Player instance = null;
 
@@ -31,7 +31,7 @@ public class Player : Character
 
     public PlayerInfoData playerInfo;
     public bool isPlayerAttackAnimationStart;
-
+    bool isDead;
     // Start is called before the first frame update
 
     public void PlayerAttackBegin()
@@ -57,8 +57,8 @@ public class Player : Character
         var getPlayerData = DataManager.GetDataManager().GetPlayerData();
         var getStatCSV = DataManager.GetDataManager().GetStatCSV();
         playerInfo.level = getPlayerData.playerLevel;
-        playerInfo.atk = /*getPlayerData.atkLevel **/ int.Parse(getStatCSV[getPlayerData.atkLevel]["Atk"].ToString());
-        playerInfo.def = /*getPlayerData.defLevel **/ int.Parse(getStatCSV[getPlayerData.defLevel]["Def"].ToString());
+        playerInfo.atk = int.Parse(getStatCSV[getPlayerData.atkLevel]["Atk"].ToString());
+        playerInfo.def = int.Parse(getStatCSV[getPlayerData.defLevel]["Def"].ToString());
         playerInfo.moveSpeed = float.Parse(getStatCSV[getPlayerData.moveSpeedLevel]["MoveSpeed"].ToString());
         playerInfo.maxHp = getPlayerData.maxHpLevel * int.Parse(getStatCSV[getPlayerData.maxHpLevel]["MaxHp"].ToString());
         playerInfo.maxMp = getPlayerData.maxMpLevel * int.Parse(getStatCSV[getPlayerData.maxMpLevel]["MaxMp"].ToString());
@@ -75,7 +75,6 @@ public class Player : Character
     public static void PlayerUpdateEvent()
     {
         instance.UpdatePlayerStat();
-        //Debug.Log("UpdateEvnetTest Player");
     }
 
 
@@ -84,11 +83,11 @@ public class Player : Character
         var getPlayerData = DataManager.GetDataManager().GetPlayerData();
         var getStatCSV = DataManager.GetDataManager().GetStatCSV();
         playerInfo.level = getPlayerData.playerLevel;
-        playerInfo.atk = /*getPlayerData.atkLevel **/ int.Parse(getStatCSV[getPlayerData.atkLevel]["Atk"].ToString());
-        playerInfo.def = /*getPlayerData.defLevel **/ int.Parse(getStatCSV[getPlayerData.defLevel]["Def"].ToString());
+        playerInfo.atk = int.Parse(getStatCSV[getPlayerData.atkLevel]["Atk"].ToString());
+        playerInfo.def = int.Parse(getStatCSV[getPlayerData.defLevel]["Def"].ToString());
         playerInfo.moveSpeed = float.Parse(getStatCSV[getPlayerData.moveSpeedLevel]["MoveSpeed"].ToString());
-        playerInfo.maxHp = /*getPlayerData.maxHpLevel * */int.Parse(getStatCSV[getPlayerData.maxHpLevel]["MaxHp"].ToString());
-        playerInfo.maxMp = /*getPlayerData.maxMpLevel * */int.Parse(getStatCSV[getPlayerData.maxMpLevel]["MaxMp"].ToString());
+        playerInfo.maxHp = int.Parse(getStatCSV[getPlayerData.maxHpLevel]["MaxHp"].ToString());
+        playerInfo.maxMp = int.Parse(getStatCSV[getPlayerData.maxMpLevel]["MaxMp"].ToString());
         playerInfo.power = playerInfo.atk + playerInfo.def + playerInfo.maxHp + playerInfo.maxMp;
         playerInfo.currentHp = getPlayerData.currentHp;
         playerInfo.currentExp = getPlayerData.currentExp;
@@ -126,84 +125,4 @@ public class Player : Character
         playerInfo.power += equipAtk;
 
     }
-
-    public void LevelUp()
-    {
-        //NeglectGameManager.savePlayerData.playerLevel += 1;
-        //NeglectGameManager.savePlayerData.statPoint += 1;
-        InitPlayerStat();
-    }
-
-    //public override IEnumerator DamageCharacter(int damage, float interval)     // 플레이어가 공격 당했을 때
-    //{
-
-    //    while (true)
-    //    {
-    //        StartCoroutine(ChanageColorCharacter(interval));                            // 코루틴 시작(피격시 색 변경)
-
-    //        if (playerInfo.def >= damage)                                       // 플레이어의 방어력 > 적의 공격력
-    //            damage = 1;                                                     // 데미지를 1로 고정
-    //        else
-    //            damage -= playerInfo.def;                                       // 아니라면 적의공격력 - 방어력
-
-    //        playerInfo.currentHp -= damage;
-
-    //        if (playerInfo.currentHp <= 0)
-    //        {
-    //            KillCharacter();
-    //            break;
-    //        }
-
-    //        if (interval > float.Epsilon)                                       // interval 시간만큼 대기.
-    //            yield return new WaitForSeconds(interval);
-    //        else
-    //            break;
-
-    //    }
-    //    yield return new WaitForSeconds(1);
-    //}
-
-    public void SetHp(int hpValue)
-    {
-        playerInfo.currentHp += hpValue;
-    }
-
-    public int GetHp()
-    {
-        return playerInfo.currentHp;
-    }
-
-    //public void ExpGain(int exp)
-    //{
-    //    playerInfo.currentExp += exp;
-    //    if (playerInfo.currentExp >= playerInfo.maxExp)
-    //    {
-    //        playerInfo.currentExp -= playerInfo.maxExp;
-    //        DataManager.GetDataManager().PlayerLevelUp();
-    //    }
-    //    DataManager.GetDataManager().SetExp(playerInfo.currentExp);
-    //}
-
-    //public void GoldGain(int gold)
-    //{
-    //    playerInfo.currentGold += gold;
-        
-    //    DataManager.GetDataManager().SetGold(playerInfo.currentGold);
-    //}
-    private IEnumerator Attack()
-    {
-        yield return new WaitForSeconds(0.5f);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-      
-    }
-
-    private void OnDestroy()
-    {
-       
-    }
-
-
 }

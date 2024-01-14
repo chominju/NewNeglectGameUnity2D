@@ -31,7 +31,6 @@ public class EnemyAction : Action
 
     void Start()
     {
-
         StopAllCoroutines();
         InitValue();
         InitComponent();
@@ -47,6 +46,7 @@ public class EnemyAction : Action
 
     private void OnEnable()
     {
+        // 활성화 될때마다 실행
         StopAllCoroutines();
         InitValue();
         InitComponent();
@@ -59,6 +59,8 @@ public class EnemyAction : Action
         atk = GetComponent<Enemy>().GetEnemyData().atk;
         isTriggerPlayer = false;
         currentAngle = 0;
+
+        // 리스폰 위치로 조정
         this.transform.position = startPosition;
     }
 
@@ -83,31 +85,9 @@ public class EnemyAction : Action
         this.transform.position = startPosition;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public  override IEnumerator CharacterDamage(int damage, float interval)
-    {
-        while (true)
-        {
-            damage = player.GetComponent<Player>().playerInfo.atk;
-            if (enemyCompoenet.GetHp() <= 0)
-            {
-                enemyCompoenet.SetDead(true);
-            }
-            else
-            {
-                enemyCompoenet.SetHp(-damage);
-            }
-            yield return new WaitForSeconds(interval);
-        }
-    }
-
     public void SkillDamage(int damage)
     {
+        // 스킬에 의해 데미지를 받은 경우
         enemyCompoenet.SetHp(-damage);
 
         if (canvasDamageObject == null)
@@ -142,6 +122,7 @@ public class EnemyAction : Action
     {
         while (true)
         {
+            // 배회하는 함수
             GetWanderPos();
 
             if (moveCoroutine != null)
@@ -159,7 +140,8 @@ public class EnemyAction : Action
     {
         currentAngle += Random.Range(0, 360);
 
-        currentAngle = Mathf.Repeat(currentAngle, 360);
+        // 360보다 커지는걸 방지
+        currentAngle = currentAngle % 360;
 
         endPosition += Vector3FromAngle(currentAngle);
     }
@@ -180,7 +162,7 @@ public class EnemyAction : Action
         {
             if (playerTransform != null)                                                                           // 추적중이라면
             {
-                endPosition = playerTransform.position;                                                         // endPosition의 원래 값을 targetTransform르오 덮어쓴다.(새로운 위치로 계속 바뀜.)
+                endPosition = playerTransform.position;                                                         // endPosition의 원래 값을 targetTransform르오 덮어쓴다.(새로운 위치로 계속 바뀜)
             }   
 
             if (rb2D != null)                                                                         // 리지드바디 유무 확인
@@ -194,7 +176,7 @@ public class EnemyAction : Action
 
                 rb2D.MovePosition(newPosition);                                                                 // 이동하기
 
-                remainingDistance = (transform.position - endPosition).sqrMagnitude;                            // 남은거리를 알 수 있다
+                remainingDistance = Vector3.Distance(transform.position, endPosition);                            // 남은거리
 
                 if (prePosition != endPosition)
                 {
@@ -243,12 +225,14 @@ public class EnemyAction : Action
         if (collision.gameObject.CompareTag("Player"))
         {
             isTriggerPlayer = true;
+            // 플레이어 위치 가져오기
             SetTarget();
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        // 플레이어와 충돌 해제
         if (collision.gameObject.CompareTag("Player"))
         {
             isTriggerPlayer = false;
@@ -261,11 +245,6 @@ public class EnemyAction : Action
         target =  GameObject.Find("Player");
         playerTransform = target.GetComponent<Transform>();
         endPosition = playerTransform.position;
-    }
-
-    public override IEnumerator AttackToTarget()
-    {
-        yield return new WaitForSeconds(animator.speed);
     }
 
 }

@@ -55,7 +55,6 @@ public class Skill : MonoBehaviour
     bool isTriggerEnemy;
 
     Vector3 direction; 
-    // Start is called before the first frame update
     void Start()
     {
         SetSkillData();
@@ -70,7 +69,6 @@ public class Skill : MonoBehaviour
         if (boxCollider)
         {
             boxCollider.size = new Vector2(boxCollider.size.x * transform.localScale.x, boxCollider.size.y * transform.localScale.y);
-           // boxCollider.offset = new Vector2(boxCollider.offset.x * transform.localScale.x, boxCollider.offset.y * transform.localScale.y);
             boxColliderSize = boxCollider.size;
         }
 
@@ -83,23 +81,6 @@ public class Skill : MonoBehaviour
         getPlayerAtk = GameObject.Find("Player").GetComponent<Player>().GetPlayerInfo().atk;
         playerAtkMin = getPlayerAtk / 2;
         playerAtkMax = getPlayerAtk;
-
-        //currentCoroutine = null;
-        //while (true)
-        //{
-        //    if (currentCoroutine == null)
-        //        currentCoroutine = StartCoroutine(SkillCoolTime());
-        //    else
-        //    {
-        //        if (currentSkillCoolTime <= 0.0f)
-        //        {
-        //            StopCoroutine(currentCoroutine);
-        //            currentCoroutine = null;
-        //            Destroy(gameObject);
-        //            break;
-        //        }
-        //    }
-        //}
 
 
         if (isSummon)
@@ -198,14 +179,6 @@ public STATE getState()
             }
         }
 
-
-        //skillData.holdingTime -= Time.deltaTime;
-
-        //if (skillData.holdingTime <= 0.0f && isSkillAnimationFinish==true)
-        //{
-        //    isSkillAnimationFinish = false;
-        //    Destroy(gameObject);  
-        //}
     }
 
     private void ApplyDamageToEnemies()
@@ -230,9 +203,6 @@ public STATE getState()
 
                 collider.gameObject.GetComponent<EnemyAction>().SkillDamage(skillDamage + randomDamage);
                 isTriggerEnemy = true;
-                // 적에게 데미지를 입히는 로직을 구현합니다.
-                //EnemyHealth enemyHealth = collider.GetComponent<EnemyHealth>();
-                //enemyHealth.TakeDamage(damageAmount);
             }
         }
 
@@ -242,44 +212,8 @@ public STATE getState()
             isTriggerEnemy = false;
         }
 
-
-
-
-
-
-
-
-        // 주변에 있는 모든 적에게 스킬 데미지를 입힙니다.
-        //Collider[] colliders = Physics.OverlapBox(transform.position, colliderSize);
-        //BoxCollider2D [] colliders = Physics.OverlapBox(transform.position, colliderSize);
-        //bool isEnemy = false;
-        //Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, boxColliderSize, 0.0f);
-        //foreach (Collider2D collider in colliders)
-        //{
-        //    if (collider.CompareTag("Enemy"))
-        //    {
-        //        Debug.Log("Skill Damage Enemy : " + collider.gameObject.name);
-        //        isEnemy = true;
-        //        SetState(STATE.ATTACK);
-
-        //        int randomDamage = Random.Range(playerAtkMin, playerAtkMax);
-
-        //        collider.gameObject.GetComponent<EnemyAction>().SkillDamage(skillDamage+ randomDamage);
-        //        isTriggerEnemy = true;
-        //        // 적에게 데미지를 입히는 로직을 구현합니다.
-        //        //EnemyHealth enemyHealth = collider.GetComponent<EnemyHealth>();
-        //        //enemyHealth.TakeDamage(damageAmount);
-        //    }
-        //}
-
-        //if (!isEnemy)
-        //{
-        //    SetState(STATE.IDLE);
-        //    isTriggerEnemy = false;
-        //}
     }
 
-    // Update is called once per frame
 
     public void SetSkillData()
     {
@@ -318,26 +252,23 @@ public STATE getState()
         Debug.Log("Player Target(Skill.cs) : " + playerTarget.name);
 
         // 플레이어 타겟(적) 위치에 생성해야함
-        if (isTargetToEnemy == true) 
+        if (isTargetToEnemy == true)
         {
             if (playerTarget == null)
             {
                 Debug.Log("No Player Target");
-                //isTargetToEnemy = false;
             }
             else
             {
                 Vector3 enmeyPos = playerTarget.GetComponent<Transform>().position;
                 gameObject.transform.position = new Vector3(enmeyPos.x, enmeyPos.y, 0);
-                Debug.Log("isTargetToEnemy is true : " + playerTarget.name +" << posX : "+ enmeyPos.x + "posY : "+ enmeyPos.y);
+                Debug.Log("isTargetToEnemy is true : " + playerTarget.name + " << posX : " + enmeyPos.x + "posY : " + enmeyPos.y);
 
             }
         }
         else
         {
-        // 플레이어에서 위치에 생성
-
-
+            // 플레이어에서 위치에 생성
             Action.DIR playerDir = getPlayer.GetComponent<Action>().GetCurDir();
             Vector3 playerPos = getPlayer.GetComponent<Transform>().position;
             if (playerDir == Action.DIR.LEFT)
@@ -354,7 +285,7 @@ public STATE getState()
                 playerPos.y += modifyPosY;
                 gameObject.transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z);
             }
-            Debug.Log("isTargetToEnemy is false : " +  " << posX : " + playerPos.x + "posY : " + playerPos.y);
+            Debug.Log("isTargetToEnemy is false : " + " << posX : " + playerPos.x + "posY : " + playerPos.y);
             direction = (playerTargetPos - gameObject.transform.position).normalized;
         }
     }
@@ -380,14 +311,6 @@ public STATE getState()
         isSkillUse = state;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //if (collision.gameObject.CompareTag("Enemy"))
-        //{
-        //    collision.gameObject.GetComponent<EnemyAction>().SkillDamage(int.Parse(skillDetail[skillLevel]["SkillAtk"].ToString()), 1.0f);
-        //    //StartCoroutine(target.GetComponent<EnemyAction>().CharacterDamage(atk, animator.speed));
-        //}
-    }
 
     public void SetAttackAble()
     {
@@ -402,7 +325,6 @@ public STATE getState()
     {
         if (boxCollider != null)                                                          // null인지 체크
         {
-                //Debug.Log("boxCollider.size : " + boxCollider.size.x + " , " + boxCollider.size.y);
             if (!isTriggerEnemy)
             {
                 Gizmos.color = Color.blue;

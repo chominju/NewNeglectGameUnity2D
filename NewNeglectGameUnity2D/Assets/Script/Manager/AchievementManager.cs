@@ -52,21 +52,21 @@ public class AchievementManager : MonoBehaviour
         // 현재시간 가져오기
         DateTime realTime =  getRealTime();
 
+        // 현재시간 - 로그인 시간
         TimeSpan durationTime = realTime - rewardStartTime;
 
         int durationTimeDay = durationTime.Days;
         int durationTimeHours = durationTime.Hours;
         int durationTimeMinutes = durationTime.Minutes;
 
+        // 분으로 계산
         int totalMinutes = durationTimeDay * 24 * 60 + durationTimeHours * 60 + durationTimeMinutes;
 
+        // 1분이상일때 숫자 업데이트
         if(totalMinutes >=1)
         {
-            //Debug.Log("AccessingTime : " + totalMinutes);
             DataManager.GetDataManager().UpdateAchievementData("AccessingTime", true, totalMinutes);
         }
-
-
     }
 
     public void CloseAchievementUI()
@@ -139,15 +139,12 @@ public class AchievementManager : MonoBehaviour
                         {
                             // 보상을 이미 받음
                             SoundManager.GetInstance().PlayFailSound();
-                            //button.GetComponentInChildren<Text>().text = "완료";
                         }
                     }
                     else
                     {
                         // 실패
                         SoundManager.GetInstance().PlayFailSound();
-                        //button.GetComponentInChildren<Text>().text = "받기";
-                        Debug.Log("Login Reward already received");
                     }
                 }
             }
@@ -213,21 +210,6 @@ public class AchievementManager : MonoBehaviour
                 {
                     achievementButtons[num].GetComponent<Image>().color = Color.yellow;
                     achievementButtons[num].GetComponentInChildren<Text>().text = "받기";
-
-                    //if (achievement.achievementName.Equals("EnemyKill"))
-                    //{
-                    //    // 접속시간 
-                        
-                    //}
-                    //else if (achievement.achievementName.Equals("AccessingTime"))
-                    //{
-                    //    // 몬스터 사냥
-                    //}
-                    //else
-                    //{
-                    //    // 업적에 없음. 버그
-                    //    Debug.Log("No Achievement Name");
-                    //}
                 }
             }
             // 실패
