@@ -238,9 +238,8 @@ public class NeglectGameManager : MonoBehaviour
             int currentMinute = int.Parse(System.DateTime.Now.ToString("mm"));
             int currentSecond = int.Parse(System.DateTime.Now.ToString("mm"));
 
-            DateTime loadDate = new DateTime(loadYear, loadMonth, loadDay, loadHour, loadMinute, loadSecond); // 시작 날짜
-
-            DateTime currentDate = new DateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute, currentSecond); // 시작 날짜
+            DateTime loadDate = new DateTime(loadYear, loadMonth, loadDay, loadHour, loadMinute, loadSecond); // 마지막 로그인 기록
+            DateTime currentDate = new DateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute, currentSecond); // 현재 로그인 기록
             loginTime = currentDate;
 
             TimeSpan duration = currentDate - loadDate; // 두 날짜 사이의 시간 간격 계산
@@ -251,7 +250,7 @@ public class NeglectGameManager : MonoBehaviour
             int offlineMinutes = duration.Minutes;
             int offlineSeconds = duration.Seconds;
 
-            // 다른게 하나라도 있으면 오늘 로그인을 하지않은 것
+            // 다른게 하나라도 있으면 오늘 로그인을 하지않은 것(로그인 보상을 위해서)
             if ((loadYear != currentYear) || (loadMonth != currentMonth) || (loadDay != currentDay))
                 isAlreadyLoginToday = false;
             else

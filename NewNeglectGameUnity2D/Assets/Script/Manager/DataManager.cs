@@ -13,14 +13,12 @@ public class DataManager : MonoBehaviour
     private static DataManager instance = null;
 
     private PlayerData playerData;
-    //private static PlayerData playerDataAsset;
     private ItemData[] equipmentData;
     private SkillData[] skillData;
     private AchievementData[] achievementData;
     private DateTimeData lastLogoutData;
 
 
-    //private Dictionary<string,int> achievementData;
     private int skillDataQuantity;
     private List<Dictionary<string, object>> playerStatCsv;
     private List<Dictionary<string, object>> equipmentCsv;
@@ -31,8 +29,6 @@ public class DataManager : MonoBehaviour
     private List<Dictionary<string, object>> enemyDataCsv;                                                         // 적들 데이터 받아오기
     private List<Dictionary<string, object>> fieldDataCsv;
     private string loginLogText;
-    private string achievementDataText;
-    private string lastLoginLogText;
 
 
     private const string playerStatFileName = "playerStatData";
@@ -74,7 +70,10 @@ public class DataManager : MonoBehaviour
 
         if (instance !=null)
         {
+            instance.DelegateInit();
             instance.CsvDataLoad();
+            CreateEquipmentDetailData();
+            CreateSkillDetailData();
         }
 
     }
@@ -87,70 +86,77 @@ public class DataManager : MonoBehaviour
 
     public  void CsvDataLoad()
     {
-        DelegateInit();
-
+        // csv 로드
         playerStatCsv = FileReader.ReadCSVFile(playerStatFileName);
         enemyDataCsv = FileReader.ReadCSVFile(enemyDataFileName);                                          // 몬스터의 데이터 가져옴
         fieldDataCsv = FileReader.ReadCSVFile(fieldDataFileName);
         equipmentCsv = FileReader.ReadCSVFile(equipmentFileName);
         skillCsv = FileReader.ReadCSVFile(skillFileName);
         achievementCsv = FileReader.ReadCSVFile(achievementFileName);
-
         loginLogText = FileReader.ReadTXTFile(loginLogPath);
-        achievementDataText = FileReader.ReadTXTFile(achievementDataSavePath);
-        lastLoginLogText = FileReader.ReadTXTFile(lastLogoutLogPath);
-
-        CreateEquipmentDetailData();
-        CreateSkillDetailData();
     }
 
     public void DelegateInit()
     {
+        // 플레이어 관련
         PlayerUpdateEvnet += Player.PlayerUpdateEvent;
         PlayerUpdateEvnet += UIManager.UIManagerUpdateEvent;
         PlayerUpdateEvnet += PlayerInfoUI.PlayerInfoUIUpdateEvent;
         PlayerUpdateEvnet += GachaUI.GachaUIUpdateEvent;
         PlayerUpdateEvnet += EquipmentUI.EquipmentUIUpdateEvent;
         PlayerUpdateEvnet += SkillUI.SKillUIUpdateEvent;
+
+        // 장비 관련
         EquipmentUpdateEvnet += EquipmentUI.EquipmentUIUpdateEvent;
+
+        // 스킬 관련
         SkillUpdateEvnet += SkillUI.SKillUIUpdateEvent;
         SkillUpdateEvnet += SkillPresetManager.SkillPresetUIUpdateEvent;
+
+        // 업적 관련
         AchievementUpdateEvnet += AchievementManager.AchievementUpdateEvent;
     }
 
     public void InitAllData()
     {
+        // data 생성
         CreateEquipmentData();
         CreateSkillData();
         CreateAchievementData();
     }
 
 
+
+    public void UpdateAllData()
+    {
+        // 다 업데이트 하기
+        PlayerUpdateEvnet();
+        EquipmentUpdateEvnet();
+        SkillUpdateEvnet();
+    }
+
+    #region 데이터 저장 관련
     public void SaveAllData()
     {
+        // data 저장
         SavePlayerData();
         SaveEquipmentData();
         SaveSkillData();
         SaveAchievementData();
         SaveLastLogoutData();
     }
-
-    public void UpdateAllData()
-    {
-        PlayerUpdateEvnet();
-        EquipmentUpdateEvnet();
-        SkillUpdateEvnet();
-    }
-
     public void SavePlayerData()
     {
+        // 플레이어 데이터 저장
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(playerDataSavePath, json);
         PlayerUpdateEvnet();
     }
 
+
     public void SaveEquipmentData()
     {
+        // 장비 데이터 저장
         int size = equipmentData.Length;
         for (int i = 0; i < size; i++)
         {
@@ -165,6 +171,7 @@ public class DataManager : MonoBehaviour
 
     public void SaveSkillData()
     {
+        // 스킬 데이터 저장 
         int size = skillData.Length;
         for (int i = 0; i < size; i++)
         {
@@ -177,6 +184,7 @@ public class DataManager : MonoBehaviour
         SkillUpdateEvnet();
     }
 
+    #endregion
     public void RemoveAllData()
     {
         Debug.Log("Delete All Data");
@@ -480,7 +488,7 @@ public class DataManager : MonoBehaviour
 
     #endregion
 
-    #region 데이터 파일 변수 통째로 가져오기(플레이어,장비,스킬)
+    #region 데이터 전체 가져오기(플레이어,장비,스킬)
     public PlayerData GetPlayerData()
     {
         return playerData;
@@ -497,7 +505,7 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    #region 데이터 파일 변수 이름으로 그거만 찾아오기
+    #region 이름으로 특정 데이터만 찾아오기
     public ItemData GetFindEquipmentData(string equipmentName)
     {
         ItemData temp = new ItemData();
@@ -624,7 +632,7 @@ public class DataManager : MonoBehaviour
         return lastLogoutData;
     }
 
-     public void RemoveAllLoginoutLog()
+    public void RemoveAllLoginoutLog()
     {
         // 마지막 로그아웃기록 삭제
         if (File.Exists(lastLogoutLogPath))

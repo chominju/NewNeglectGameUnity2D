@@ -47,7 +47,7 @@ public class PlayerAction : Action
 
             if (!EnemyManager.IsExistEnemy())                              // 몬스터가 없다면
             {
-                curState = STATE.IDLE;
+                curState = STATE.IDLE;                                      // 가만히 서있음
             }
             else
             {
@@ -103,7 +103,7 @@ public class PlayerAction : Action
         Vector3 playerPos = this.GetComponent<Transform>().position;
         Vector3 TargetPos = target.GetComponent<Transform>().position;
 
-        float dist = Vector3.Distance(playerPos , TargetPos); // 거리의 크기를 구함
+        float dist = (playerPos - TargetPos).sqrMagnitude; // 거리의 크기를 구함
         Vector3 direction = TargetPos - playerPos;
 
         // 왼쪽

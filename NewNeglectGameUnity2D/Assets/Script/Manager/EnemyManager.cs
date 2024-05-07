@@ -90,10 +90,6 @@ public class EnemyManager : MonoBehaviour
         respawnCoroutineList.Add(name, newRespawnCoroutine);
     }
 
-    public static void EnemyRespawnEndEvent(string name)
-    {
-        instance.EnemyRespawnEnd(name);
-    }
 
     void EnemyRespawnEnd(string name)
     {
@@ -104,6 +100,10 @@ public class EnemyManager : MonoBehaviour
         // List에 있다면 그 코루틴 종료. 리스폰 관련 List에서 삭제
         StopCoroutine(respawnCoroutineList[name]); 
         respawnCoroutineList.Remove(name);
+    }
+    public static void EnemyRespawnEndEvent(string name)
+    {
+        instance.EnemyRespawnEnd(name);
     }
 
     public static bool IsExistEnemy()

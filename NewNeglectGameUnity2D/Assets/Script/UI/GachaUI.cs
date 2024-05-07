@@ -7,8 +7,8 @@ public class GachaUI : MonoBehaviour
 {
     private static GachaUI instance = null;
 
-    int skillGacha30Price;
-    int equipmentGacha30Price;
+    int skillGacha30Price;                          // 스킬 뽑기 30번 가격
+    int equipmentGacha30Price;                      // 장비 뽑기 30번 가격
 
     public GameObject gacha30UIPanel;
     public GameObject gachaFreeUIPanel;

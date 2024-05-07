@@ -98,7 +98,7 @@ public class PlayerInfoUI : MonoBehaviour
 
     public void SetStatPointUI()
     {
-        playerStatPointText.text = "스킬포인트 : " + playerInfoData.statPoint;
+        playerStatPointText.text = "스탯포인트 : " + playerInfoData.statPoint;
     }
 
     public void SetStatButton()
@@ -181,7 +181,6 @@ public class PlayerInfoUI : MonoBehaviour
         }
         else
         {
-            Debug.Log("player stat ui data error(1)!");
             return;
         }
 
@@ -199,7 +198,6 @@ public class PlayerInfoUI : MonoBehaviour
         }
         else
         {
-            Debug.Log("player stat ui data error(2)!");
             return;
         }
 

@@ -135,7 +135,6 @@ public class EnemyAction : Action
     }
 
 
-
     void GetWanderPos()
     {
         currentAngle += Random.Range(0, 360);
@@ -148,40 +147,54 @@ public class EnemyAction : Action
 
     Vector3 Vector3FromAngle(float inputAngleDegrees)
     {
-        float inputAngleRadians = inputAngleDegrees * Mathf.Deg2Rad;                    // 유니티가 제공하는 변환 상수로, 호도로 변환
+        // 유니티가 제공하는 변환 상수로, 호도로 변환
+        float inputAngleRadians = inputAngleDegrees * Mathf.Deg2Rad;                    
 
-        return new Vector3(Mathf.Cos(inputAngleRadians), Mathf.Sin(inputAngleRadians), 0);  //  변환한 호도를 사용하여 적의 방향으로 사용할 방향 벡터를 만듬.
+        //  변환한 호도를 사용하여 적의 방향으로 사용할 방향 벡터를 만듬.
+        return new Vector3(Mathf.Cos(inputAngleRadians), Mathf.Sin(inputAngleRadians), 0);  
     }
 
 
     public override IEnumerator Move()
     {
-        float remainingDistance = (transform.position - endPosition).sqrMagnitude;                              // 값의 결과는 Vector3. Vector3에 있는 sqrMagnitude라는 속성을 사용해서 적의 현재 위치와 목적지 사이의 대략적인 거리를 구함.(벡터의 크기)
+        // 값의 결과는 Vector3. Vector3에 있는 sqrMagnitude라는 속성을 사용해서 적의 현재 위치와 목적지 사이의 대략적인 거리를 구함.(벡터의 크기)
+        // 정교한 값을 구할때는 Vector3.Distance
+        // 2D 게임을 만들거나 단순하게 두 점간의 거리를 구할때는 sqrMagnitude
 
-        while (remainingDistance > float.Epsilon + 1.0f)                                                                // 현재위치와 endPosition사이에 남은거리가 0보다 큰지 확인
+        float remainingDistance = (transform.position - endPosition).sqrMagnitude;                              
+
+        // 현재위치와 endPosition사이에 남은거리가 0보다 큰지 확인
+        while (remainingDistance > float.Epsilon + 1.0f)                                                                
         {
-            if (playerTransform != null)                                                                           // 추적중이라면
+            // 추적중이라면
+            if (playerTransform != null)                                                                           
             {
-                endPosition = playerTransform.position;                                                         // endPosition의 원래 값을 targetTransform르오 덮어쓴다.(새로운 위치로 계속 바뀜)
+                // endPosition의 원래 값을 targetTransform르오 덮어쓴다.(새로운 위치로 계속 바뀜)
+                endPosition = playerTransform.position;                                                        
             }   
 
-            if (rb2D != null)                                                                         // 리지드바디 유무 확인
+            // 리지드바디 유무 확인
+            if (rb2D != null)                                                                         
             {
 
-                Vector3 newPosition = Vector3.MoveTowards(rb2D.position, endPosition, moveSpeed * Time.deltaTime);   // MoveTowards 리지드바디 2D의 움직임을 계산.
+                // MoveTowards 리지드바디 2D의 움직임을 계산.
+                Vector3 newPosition = Vector3.MoveTowards(rb2D.position, endPosition, moveSpeed * Time.deltaTime);   
                 /*
                  * MoveTowards(현재 위치, 최종위치, 프레임안에 이동할 거리)
-                 * 여기서 speed는 상태에 따라 바뀐다.
+                 * speed는 상태에 따라 바뀐다.
                  */
 
-                rb2D.MovePosition(newPosition);                                                                 // 이동하기
+                // 이동하기
+                rb2D.MovePosition(newPosition);                                                                 
 
-                remainingDistance = Vector3.Distance(transform.position, endPosition);                            // 남은거리
+                // 남은거리
+                remainingDistance = Vector3.Distance(transform.position, endPosition);                            
 
                 if (prePosition != endPosition)
                 {
                     animator.enabled = true;
-                    animator.SetBool("isWalk", true);                                                            // 걷는 상태로 변환(idle -> walking)
+                    // 걷는 상태로 변환(idle -> walking)
+                    animator.SetBool("isWalk", true);                                                            
                     animator.speed = enemyCompoenet.GetEnemyData().animationSpeed;
                     if (this.GetComponent<Transform>().position.x >= endPosition.x)
                     {
@@ -194,27 +207,30 @@ public class EnemyAction : Action
                     }
                     prePosition = endPosition;
                 }
-
+                    
             }
-            yield return new WaitForFixedUpdate();                                                              // 다음 FixedUpdate까지 실행을 양보.
+            yield return new WaitForFixedUpdate();                                                              
         }
 
-        animator.SetBool("isWalk", false);                                                                   // 목적지에 도착함(적과 플레이어의 거리가 0보다 작아짐) 대기상태로 변환
+        // 목적지에 도착함(적과 플레이어의 거리가 0보다 작아짐) 대기상태로 변환
+        animator.SetBool("isWalk", false);                                                                   
         animator.enabled = false;
     }
 
     private void OnDrawGizmos()
     {
-        if (circleCollider2D != null)                                                                                // null인지 체크
+        if (circleCollider2D != null)                                                                                
         {
-            Gizmos.DrawWireSphere(transform.position, circleCollider2D.radius);                                   // Gizmos.DrawWireSphere()를 호출하고 구를 그릴 때 필요한 위치와 반지름을 전달한다.
+            // Gizmos.DrawWireSphere()를 호출하고 구를 그릴 때 필요한 위치와 반지름을 전달한다.
+            Gizmos.DrawWireSphere(transform.position, circleCollider2D.radius);                                   
         }
 
-        if (sensorCollider2D != null)                                                                                // null인지 체크
+        if (sensorCollider2D != null)                                                                                
         {
             if (isTriggerPlayer)
                 Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, sensorCollider2D.radius);                                   // Gizmos.DrawWireSphere()를 호출하고 구를 그릴 때 필요한 위치와 반지름을 전달한다.
+            // Gizmos.DrawWireSphere()를 호출하고 구를 그릴 때 필요한 위치와 반지름을 전달한다.
+            Gizmos.DrawWireSphere(transform.position, sensorCollider2D.radius);                                   
 
         }
     }
@@ -230,21 +246,24 @@ public class EnemyAction : Action
         }
     }
 
+    public override void SetTarget()
+    {
+        // 타켓 설정(플레이어)
+        target =  GameObject.Find("Player");
+        // 플레이어의 transform 컴포넌트 가져오기
+        playerTransform = target.GetComponent<Transform>();
+        endPosition = playerTransform.position;
+    }
     private void OnTriggerExit2D(Collider2D collision)
     {
         // 플레이어와 충돌 해제
         if (collision.gameObject.CompareTag("Player"))
         {
+            // 플레이어와 충돌중이 아니다
             isTriggerPlayer = false;
+            // 플레이어 transform 컴포넌트 값 null
             playerTransform = null;
         }
-    }
-
-    public override void SetTarget()
-    {
-        target =  GameObject.Find("Player");
-        playerTransform = target.GetComponent<Transform>();
-        endPosition = playerTransform.position;
     }
 
 }

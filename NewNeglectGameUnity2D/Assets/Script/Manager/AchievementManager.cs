@@ -217,7 +217,6 @@ public class AchievementManager : MonoBehaviour
             {
                 achievementButtons[num].GetComponent<Image>().color = Color.gray;
                 achievementButtons[num].GetComponentInChildren<Text>().text = "받기";
-
             }
 
             // 업적카운터 , 보상 

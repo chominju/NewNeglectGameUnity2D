@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour
         // 피가 0 or 이미 죽은상태
         if(hp<=0 || isDead)
         {
-            isDead = false;
+            isDead = true;
             hp = maxHp;
             enemyDeadEvent(gameObject.name);
             DataManager.GetDataManager().GainExp(exp);
